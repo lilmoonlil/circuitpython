@@ -133,11 +133,6 @@ int32_t tud_msc_scsi_cb(uint8_t lun, const uint8_t scsi_cmd[16], void *buffer, u
     int32_t resplen = 0;
 
     switch (scsi_cmd[0]) {
-        case SCSI_CMD_PREVENT_ALLOW_MEDIUM_REMOVAL:
-            // Host is about to read/write etc ... better not to disconnect disk
-            resplen = 0;
-            break;
-
         default:
             // Set Sense = Invalid Command Operation
             tud_msc_set_sense(lun, SCSI_SENSE_ILLEGAL_REQUEST, 0x20, 0x00);
@@ -255,12 +250,13 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun) {
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x00);  // ok linux, ok cpy, no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x03);  // no sd linux, ok cpy no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x12);  // junk file linux, confuses/crashes windows
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);     // ok linux, no cpy no sd windows
+        tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);     // ok linux, no cpy no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x03);     // works on both after a while
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x01);  // works on both after a while
-        tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x0B);  // no sd linux, windows gets stuck
+        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x0B);  // no sd linux, windows gets stuck
         ////////mp_printf(&mp_plat_print, "EJECTED, NOT READY\n");
 
+        // if no sense is set, tinyusb will default to MEDIUM NOT PRESENT: SCSI_SENSE_NOT_READY, 0x3A, 0x00
         return false;
     }
 
