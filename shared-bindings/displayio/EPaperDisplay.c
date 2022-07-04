@@ -37,7 +37,7 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-bindings/util.h"
 #include "shared-module/displayio/__init__.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 //| class EPaperDisplay:
 //|     """Manage updating an epaper display over a display bus
@@ -63,7 +63,7 @@
 //|                  refresh_display_command: int, refresh_time: float = 40,
 //|                  busy_pin: Optional[microcontroller.Pin] = None, busy_state: bool = True,
 //|                  seconds_per_frame: float = 180, always_toggle_chip_select: bool = False,
-//|                  grayscale: bool = False) -> None:
+//|                  grayscale: bool = False, two_byte_sequence_length: bool = False) -> None:
 //|         """Create a EPaperDisplay object on the given display bus (`displayio.FourWire` or `paralleldisplay.ParallelBus`).
 //|
 //|         The ``start_sequence`` and ``stop_sequence`` are bitpacked to minimize the ram impact. Every
@@ -100,7 +100,8 @@
 //|         :param bool busy_state: State of the busy pin when the display is busy
 //|         :param float seconds_per_frame: Minimum number of seconds between screen refreshes
 //|         :param bool always_toggle_chip_select: When True, chip select is toggled every byte
-//|         :param bool grayscale: When true, the color ram is the low bit of 2-bit grayscale"""
+//|         :param bool grayscale: When true, the color ram is the low bit of 2-bit grayscale
+//|         :param bool two_byte_sequence_length: When true, use two bytes to define sequence length"""
 //|         ...
 //|
 STATIC mp_obj_t displayio_epaperdisplay_make_new(const mp_obj_type_t *type, size_t n_args, size_t n_kw, const mp_obj_t *all_args) {
@@ -110,7 +111,7 @@ STATIC mp_obj_t displayio_epaperdisplay_make_new(const mp_obj_type_t *type, size
            ARG_set_current_row_command, ARG_write_black_ram_command, ARG_black_bits_inverted,
            ARG_write_color_ram_command, ARG_color_bits_inverted, ARG_highlight_color,
            ARG_refresh_display_command,  ARG_refresh_time, ARG_busy_pin, ARG_busy_state,
-           ARG_seconds_per_frame, ARG_always_toggle_chip_select, ARG_grayscale };
+           ARG_seconds_per_frame, ARG_always_toggle_chip_select, ARG_grayscale, ARG_two_byte_sequence_length };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_display_bus, MP_ARG_REQUIRED | MP_ARG_OBJ },
         { MP_QSTR_start_sequence, MP_ARG_REQUIRED | MP_ARG_OBJ },
@@ -138,6 +139,7 @@ STATIC mp_obj_t displayio_epaperdisplay_make_new(const mp_obj_type_t *type, size
         { MP_QSTR_seconds_per_frame, MP_ARG_OBJ | MP_ARG_KW_ONLY, {.u_obj = MP_OBJ_NEW_SMALL_INT(180)} },
         { MP_QSTR_always_toggle_chip_select, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
         { MP_QSTR_grayscale, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
+        { MP_QSTR_two_byte_sequence_length, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
@@ -182,7 +184,7 @@ STATIC mp_obj_t displayio_epaperdisplay_make_new(const mp_obj_type_t *type, size
         args[ARG_write_black_ram_command].u_int, args[ARG_black_bits_inverted].u_bool, write_color_ram_command,
         args[ARG_color_bits_inverted].u_bool, highlight_color, args[ARG_refresh_display_command].u_int, refresh_time,
         busy_pin, args[ARG_busy_state].u_bool, seconds_per_frame,
-        args[ARG_always_toggle_chip_select].u_bool, args[ARG_grayscale].u_bool
+        args[ARG_always_toggle_chip_select].u_bool, args[ARG_grayscale].u_bool, args[ARG_two_byte_sequence_length].u_bool
         );
 
     return self;
@@ -266,12 +268,8 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_get_time_to_refresh(mp_obj_t self_in
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_epaperdisplay_get_time_to_refresh_obj, displayio_epaperdisplay_obj_get_time_to_refresh);
 
-const mp_obj_property_t displayio_epaperdisplay_time_to_refresh_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_time_to_refresh_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_epaperdisplay_time_to_refresh_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_time_to_refresh_obj);
 
 //|     busy: bool
 //|     """True when the display is refreshing. This uses the ``busy_pin`` when available or the
@@ -283,12 +281,8 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_get_busy(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_epaperdisplay_get_busy_obj, displayio_epaperdisplay_obj_get_busy);
 
-const mp_obj_property_t displayio_epaperdisplay_busy_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_busy_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_epaperdisplay_busy_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_busy_obj);
 
 //|     width: int
 //|     """Gets the width of the display in pixels"""
@@ -299,12 +293,8 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_get_width(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_epaperdisplay_get_width_obj, displayio_epaperdisplay_obj_get_width);
 
-const mp_obj_property_t displayio_epaperdisplay_width_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_width_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_epaperdisplay_width_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_width_obj);
 
 //|     height: int
 //|     """Gets the height of the display in pixels"""
@@ -315,12 +305,8 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_get_height(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_epaperdisplay_get_height_obj, displayio_epaperdisplay_obj_get_height);
 
-const mp_obj_property_t displayio_epaperdisplay_height_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_height_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_epaperdisplay_height_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_height_obj);
 
 //|     rotation: int
 //|     """The rotation of the display as an int in degrees."""
@@ -338,12 +324,9 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_set_rotation(mp_obj_t self_in, mp_ob
 MP_DEFINE_CONST_FUN_OBJ_2(displayio_epaperdisplay_set_rotation_obj, displayio_epaperdisplay_obj_set_rotation);
 
 
-const mp_obj_property_t displayio_epaperdisplay_rotation_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_rotation_obj,
-              (mp_obj_t)&displayio_epaperdisplay_set_rotation_obj,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETSET(displayio_epaperdisplay_rotation_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_rotation_obj,
+    (mp_obj_t)&displayio_epaperdisplay_set_rotation_obj);
 
 //|     bus: _DisplayBus
 //|     """The bus being used by the display"""
@@ -354,12 +337,8 @@ STATIC mp_obj_t displayio_epaperdisplay_obj_get_bus(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_epaperdisplay_get_bus_obj, displayio_epaperdisplay_obj_get_bus);
 
-const mp_obj_property_t displayio_epaperdisplay_bus_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_epaperdisplay_get_bus_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_epaperdisplay_bus_obj,
+    (mp_obj_t)&displayio_epaperdisplay_get_bus_obj);
 
 
 STATIC const mp_rom_map_elem_t displayio_epaperdisplay_locals_dict_table[] = {

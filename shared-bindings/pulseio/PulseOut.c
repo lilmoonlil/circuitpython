@@ -34,7 +34,7 @@
 #include "shared-bindings/pulseio/PulseOut.h"
 #include "shared-bindings/pwmio/PWMOut.h"
 #include "shared-bindings/util.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 //| class PulseOut:
 //|     """Pulse PWM "carrier" output on and off. This is commonly used in infrared remotes. The
@@ -59,7 +59,7 @@
 //|           import board
 //|
 //|           # 50% duty cycle at 38kHz.
-//|           pwm = pulseio.PulseOut(board.LED, frequency=38000, duty_cycle=32768)
+//|           pulse = pulseio.PulseOut(board.LED, frequency=38000, duty_cycle=32768)
 //|           #                             on   off     on    off    on
 //|           pulses = array.array('H', [65000, 1000, 65000, 65000, 1000])
 //|           pulse.send(pulses)

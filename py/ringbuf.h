@@ -37,7 +37,6 @@ typedef struct _ringbuf_t {
     uint32_t size;
     uint32_t iget;
     uint32_t iput;
-    bool heap;
 } ringbuf_t;
 
 // Note that the capacity of the buffer is N-1!
@@ -52,7 +51,7 @@ int ringbuf_put(ringbuf_t *r, uint8_t v);
 void ringbuf_clear(ringbuf_t *r);
 size_t ringbuf_num_empty(ringbuf_t *r);
 size_t ringbuf_num_filled(ringbuf_t *r);
-size_t ringbuf_put_n(ringbuf_t *r, uint8_t *buf, size_t bufsize);
+size_t ringbuf_put_n(ringbuf_t *r, const uint8_t *buf, size_t bufsize);
 size_t ringbuf_get_n(ringbuf_t *r, uint8_t *buf, size_t bufsize);
 
 // Note: big-endian. No-op if not enough room available for both bytes.

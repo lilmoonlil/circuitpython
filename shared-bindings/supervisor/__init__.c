@@ -27,16 +27,16 @@
 
 #include "py/obj.h"
 #include "py/runtime.h"
-#include "py/reload.h"
 #include "py/objstr.h"
 
 #include "shared/runtime/interrupt_char.h"
-#include "supervisor/shared/autoreload.h"
 #include "supervisor/shared/bluetooth/bluetooth.h"
+#include "supervisor/shared/display.h"
 #include "supervisor/shared/status_leds.h"
+#include "supervisor/shared/reload.h"
 #include "supervisor/shared/stack.h"
 #include "supervisor/shared/traceback.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 #include "supervisor/shared/workflow.h"
 
 #include "shared-bindings/microcontroller/__init__.h"
@@ -75,16 +75,15 @@ STATIC mp_obj_t supervisor_disable_autoreload(void) {
 MP_DEFINE_CONST_FUN_OBJ_0(supervisor_disable_autoreload_obj, supervisor_disable_autoreload);
 
 //| def set_rgb_status_brightness(brightness: int) -> None:
-//|     """Set brightness of status neopixel from 0-255
-//|     `set_rgb_status_brightness` is called."""
+//|     """Set brightness of status RGB LED from 0-255. This will take effect
+//|        after the current code finishes and the status LED is used to show
+//|        the finish state."""
 //|     ...
 //|
 STATIC mp_obj_t supervisor_set_rgb_status_brightness(mp_obj_t lvl) {
     // This must be int. If cast to uint8_t first, will never raise a ValueError.
     int brightness_int = mp_obj_get_int(lvl);
-    if (brightness_int < 0 || brightness_int > 255) {
-        mp_raise_ValueError(translate("Brightness must be between 0 and 255"));
-    }
+    mp_arg_validate_int_range(brightness_int, 0, 255, MP_QSTR_brightness);
     set_status_brightness((uint8_t)brightness_int);
     return mp_const_none;
 }
@@ -95,9 +94,7 @@ MP_DEFINE_CONST_FUN_OBJ_1(supervisor_set_rgb_status_brightness_obj, supervisor_s
 //|     ...
 //|
 STATIC mp_obj_t supervisor_reload(void) {
-    reload_requested = true;
-    supervisor_set_run_reason(RUN_REASON_SUPERVISOR_RELOAD);
-    mp_raise_reload_exception();
+    reload_initiate(RUN_REASON_SUPERVISOR_RELOAD);
     return mp_const_none;
 }
 MP_DEFINE_CONST_FUN_OBJ_0(supervisor_reload_obj, supervisor_reload);
@@ -109,9 +106,8 @@ MP_DEFINE_CONST_FUN_OBJ_0(supervisor_reload_obj, supervisor_reload);
 STATIC mp_obj_t supervisor_set_next_stack_limit(mp_obj_t size_obj) {
     mp_int_t size = mp_obj_get_int(size_obj);
 
-    if (size < 256) {
-        mp_raise_ValueError(translate("Stack size must be at least 256"));
-    }
+    mp_arg_validate_int_min(size, 256, MP_QSTR_size);
+
     set_next_stack_size(size);
 
     return mp_const_none;
@@ -299,6 +295,21 @@ STATIC mp_obj_t supervisor_disable_ble_workflow(void) {
 }
 MP_DEFINE_CONST_FUN_OBJ_0(supervisor_disable_ble_workflow_obj, supervisor_disable_ble_workflow);
 
+//| def reset_terminal(x_pixels: int, y_pixels: int) -> None:
+//|     """Reset the CircuitPython serial terminal with new dimensions."""
+//|     ...
+//|
+STATIC mp_obj_t supervisor_reset_terminal(mp_obj_t x_pixels, mp_obj_t y_pixels) {
+    #if CIRCUITPY_DISPLAYIO
+    supervisor_stop_terminal();
+    supervisor_start_terminal(mp_obj_get_int(x_pixels), mp_obj_get_int(y_pixels));
+    #else
+    mp_raise_NotImplementedError(NULL);
+    #endif
+    return mp_const_none;
+}
+MP_DEFINE_CONST_FUN_OBJ_2(supervisor_reset_terminal_obj, supervisor_reset_terminal);
+
 STATIC const mp_rom_map_elem_t supervisor_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR___name__), MP_ROM_QSTR(MP_QSTR_supervisor) },
     { MP_ROM_QSTR(MP_QSTR_enable_autoreload),  MP_ROM_PTR(&supervisor_enable_autoreload_obj) },
@@ -312,6 +323,7 @@ STATIC const mp_rom_map_elem_t supervisor_module_globals_table[] = {
     { MP_ROM_QSTR(MP_QSTR_ticks_ms),  MP_ROM_PTR(&supervisor_ticks_ms_obj) },
     { MP_ROM_QSTR(MP_QSTR_get_previous_traceback),  MP_ROM_PTR(&supervisor_get_previous_traceback_obj) },
     { MP_ROM_QSTR(MP_QSTR_disable_ble_workflow),  MP_ROM_PTR(&supervisor_disable_ble_workflow_obj) },
+    { MP_ROM_QSTR(MP_QSTR_reset_terminal),  MP_ROM_PTR(&supervisor_reset_terminal_obj) },
 };
 
 STATIC MP_DEFINE_CONST_DICT(supervisor_module_globals, supervisor_module_globals_table);

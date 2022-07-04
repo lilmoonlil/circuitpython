@@ -42,10 +42,25 @@ wifi_radio_obj_t common_hal_wifi_radio_obj;
 
 #include "components/log/include/esp_log.h"
 
-static const char *TAG = "wifi";
+#include "supervisor/port.h"
+#include "supervisor/workflow.h"
+
+#include "esp_ipc.h"
+
+static const char *TAG = "CP wifi";
+
+STATIC void schedule_background_on_cp_core(void *arg) {
+    supervisor_workflow_request_background();
+
+    // CircuitPython's VM is run in a separate FreeRTOS task from wifi callbacks. So, we have to
+    // notify the main task every time in case it's waiting for us.
+    port_wake_main_task();
+}
 
 static void event_handler(void *arg, esp_event_base_t event_base,
     int32_t event_id, void *event_data) {
+    // This runs on the PRO CORE! It cannot share CP interrupt enable/disable
+    // directly.
     wifi_radio_obj_t *radio = arg;
     if (event_base == WIFI_EVENT) {
         switch (event_id) {
@@ -106,12 +121,26 @@ static void event_handler(void *arg, esp_event_base_t event_base,
         radio->retries_left = radio->starting_retries;
         xEventGroupSetBits(radio->event_group_handle, WIFI_CONNECTED_BIT);
     }
+    // Use IPC to ensure we run schedule background on the same core as CircuitPython.
+    #if defined(CONFIG_FREERTOS_UNICORE) && CONFIG_FREERTOS_UNICORE
+    schedule_background_on_cp_core(NULL);
+    #else
+    // This only blocks until the start of the function. That's ok since the PRO
+    // core shouldn't care what we do.
+    esp_ipc_call(CONFIG_ESP_MAIN_TASK_AFFINITY, schedule_background_on_cp_core, NULL);
+    #endif
 }
 
-static bool wifi_inited, wifi_ever_inited;
+static bool wifi_inited;
+static bool wifi_ever_inited;
+static bool wifi_user_initiated;
 
-void common_hal_wifi_init(void) {
+void common_hal_wifi_init(bool user_initiated) {
+    if (wifi_inited) {
+        return;
+    }
     wifi_inited = true;
+    wifi_user_initiated = user_initiated;
     common_hal_wifi_radio_obj.base.type = &wifi_radio_type;
 
     if (!wifi_ever_inited) {
@@ -157,6 +186,12 @@ void common_hal_wifi_init(void) {
     common_hal_wifi_radio_set_enabled(self, true);
 }
 
+void wifi_user_reset(void) {
+    if (wifi_user_initiated) {
+        wifi_reset();
+    }
+}
+
 void wifi_reset(void) {
     if (!wifi_inited) {
         return;
@@ -176,6 +211,7 @@ void wifi_reset(void) {
     esp_netif_destroy(radio->ap_netif);
     radio->ap_netif = NULL;
     wifi_inited = false;
+    supervisor_workflow_request_background();
 }
 
 void ipaddress_ipaddress_to_esp_idf(mp_obj_t ip_address, ip_addr_t *esp_ip_address) {
@@ -187,6 +223,16 @@ void ipaddress_ipaddress_to_esp_idf(mp_obj_t ip_address, ip_addr_t *esp_ip_addre
     const char *bytes = mp_obj_str_get_data(packed, &len);
 
     IP_ADDR4(esp_ip_address, bytes[0], bytes[1], bytes[2], bytes[3]);
+}
+
+void ipaddress_ipaddress_to_esp_idf_ip4(mp_obj_t ip_address, esp_ip4_addr_t *esp_ip_address) {
+    if (!mp_obj_is_type(ip_address, &ipaddress_ipv4address_type)) {
+        mp_raise_ValueError(translate("Only IPv4 addresses supported"));
+    }
+    mp_obj_t packed = common_hal_ipaddress_ipv4address_get_packed(ip_address);
+    size_t len;
+    const char *bytes = mp_obj_str_get_data(packed, &len);
+    esp_netif_set_ip4_addr(esp_ip_address, bytes[0], bytes[1], bytes[2], bytes[3]);
 }
 
 void common_hal_wifi_gc_collect(void) {

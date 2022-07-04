@@ -43,7 +43,7 @@
 #include "common-hal/_bleio/__init__.h"
 
 #include "supervisor/fatfs_port.h"
-#include "supervisor/shared/autoreload.h"
+#include "supervisor/shared/reload.h"
 #include "supervisor/shared/bluetooth/file_transfer.h"
 #include "supervisor/shared/bluetooth/file_transfer_protocol.h"
 #include "supervisor/shared/tick.h"
@@ -325,8 +325,6 @@ STATIC uint8_t _process_write(const uint8_t *raw_buf, size_t command_len) {
     if (chunk_size == 0) {
         // Don't reload until everything is written out of the packet buffer.
         common_hal_bleio_packet_buffer_flush(&_transfer_packet_buffer);
-        // Trigger an autoreload
-        autoreload_start();
         return ANY_COMMAND;
     }
 
@@ -383,8 +381,6 @@ STATIC uint8_t _process_write_data(const uint8_t *raw_buf, size_t command_len) {
         #endif
         // Don't reload until everything is written out of the packet buffer.
         common_hal_bleio_packet_buffer_flush(&_transfer_packet_buffer);
-        // Trigger an autoreload
-        autoreload_start();
         return ANY_COMMAND;
     }
     return WRITE_DATA;
@@ -465,8 +461,6 @@ STATIC uint8_t _process_delete(const uint8_t *raw_buf, size_t command_len) {
     if (result == FR_OK) {
         // Don't reload until everything is written out of the packet buffer.
         common_hal_bleio_packet_buffer_flush(&_transfer_packet_buffer);
-        // Trigger an autoreload
-        autoreload_start();
     }
     return ANY_COMMAND;
 }
@@ -520,8 +514,6 @@ STATIC uint8_t _process_mkdir(const uint8_t *raw_buf, size_t command_len) {
     if (result == FR_OK) {
         // Don't reload until everything is written out of the packet buffer.
         common_hal_bleio_packet_buffer_flush(&_transfer_packet_buffer);
-        // Trigger an autoreload
-        autoreload_start();
     }
     return ANY_COMMAND;
 }
@@ -668,8 +660,6 @@ STATIC uint8_t _process_move(const uint8_t *raw_buf, size_t command_len) {
     if (result == FR_OK) {
         // Don't reload until everything is written out of the packet buffer.
         common_hal_bleio_packet_buffer_flush(&_transfer_packet_buffer);
-        // Trigger an autoreload
-        autoreload_start();
     }
     return ANY_COMMAND;
 }
@@ -692,7 +682,7 @@ void supervisor_bluetooth_file_transfer_background(void) {
         if (size == 0) {
             break;
         }
-        autoreload_suspend(AUTORELOAD_LOCK_BLE);
+        autoreload_suspend(AUTORELOAD_SUSPEND_BLE);
         // TODO: If size < 0 return an error.
         current_offset += size;
         #if CIRCUITPY_VERBOSE_BLE
@@ -710,7 +700,7 @@ void supervisor_bluetooth_file_transfer_background(void) {
             response[0] = next_command;
             response[1] = STATUS_ERROR_PROTOCOL;
             common_hal_bleio_packet_buffer_write(&_transfer_packet_buffer, response, 2, NULL, 0);
-            autoreload_resume(AUTORELOAD_LOCK_BLE);
+            autoreload_resume(AUTORELOAD_SUSPEND_BLE);
             break;
         }
         switch (current_state) {
@@ -744,7 +734,15 @@ void supervisor_bluetooth_file_transfer_background(void) {
             current_offset = 0;
         }
         if (next_command == ANY_COMMAND) {
-            autoreload_resume(AUTORELOAD_LOCK_BLE);
+            autoreload_resume(AUTORELOAD_SUSPEND_BLE);
+            // Trigger a reload if the command may have mutated the file system.
+            if (current_state == WRITE ||
+                current_state == WRITE_DATA ||
+                current_state == DELETE ||
+                current_state == MKDIR ||
+                current_state == MOVE) {
+                autoreload_trigger();
+            }
         }
     }
     running = false;
@@ -754,5 +752,5 @@ void supervisor_bluetooth_file_transfer_disconnected(void) {
     next_command = ANY_COMMAND;
     current_offset = 0;
     f_close(&active_file);
-    autoreload_resume(AUTORELOAD_LOCK_BLE);
+    autoreload_resume(AUTORELOAD_SUSPEND_BLE);
 }

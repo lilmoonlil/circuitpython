@@ -36,7 +36,7 @@
 
 #include "shared-module/storage/__init__.h"
 #include "supervisor/filesystem.h"
-#include "supervisor/shared/autoreload.h"
+#include "supervisor/shared/reload.h"
 
 #define MSC_FLASH_BLOCK_SIZE    512
 
@@ -223,7 +223,9 @@ void tud_msc_write10_complete_cb(uint8_t lun) {
     // A write to CIRCUITPY is complete. Start the autoreload clock.
     // Don't auto-reload on writes to other filesystems.
     if (lun == 0) {
-        autoreload_start();
+        // This write is complete; initiate an autoreload.
+        autoreload_resume(AUTORELOAD_SUSPEND_USB);
+        autoreload_trigger();
     }
 }
 
@@ -240,17 +242,17 @@ void tud_msc_inquiry_cb(uint8_t lun, uint8_t vendor_id[8], uint8_t product_id[16
 // Invoked when received Test Unit Ready command.
 // return true allowing host to read/write this LUN e.g SD card inserted
 bool tud_msc_test_unit_ready_cb(uint8_t lun) {
-    /////mp_printf(&mp_plat_print, "test unit ready: %d  ", lun);
     if (lun >= LUN_COUNT) {
         return false;
     }
 
-    if (get_vfs(lun) == NULL || (ejected[lun])) {
+    fs_user_mount_t *current_mount = get_vfs(lun);
+    if (current_mount == NULL || ejected[lun]) {
         // Set 0x3a for media not present.
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x00);  // ok linux, ok cpy, no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x03);  // no sd linux, ok cpy no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x12);  // junk file linux, confuses/crashes windows
-        tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);     // ok linux, no cpy no sd windows
+        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);     // ok linux, no cpy no sd windows
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x03);     // works on both after a while
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x01);  // works on both after a while
         // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x0B);  // no sd linux, windows gets stuck
@@ -260,7 +262,6 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun) {
         return false;
     }
 
-    /////////mp_printf(&mp_plat_print, "READY\n");
     return true;
 }
 

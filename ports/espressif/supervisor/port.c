@@ -51,6 +51,8 @@
 #include "supervisor/background_callback.h"
 #include "supervisor/memory.h"
 #include "supervisor/shared/tick.h"
+#include "shared-bindings/microcontroller/__init__.h"
+#include "shared-bindings/microcontroller/RunMode.h"
 #include "shared-bindings/rtc/__init__.h"
 
 #include "peripherals/rmt.h"
@@ -68,6 +70,10 @@
 #include "common-hal/audiobusio/__init__.h"
 #endif
 
+#if CIRCUITPY_BLEIO
+#include "shared-bindings/_bleio/__init__.h"
+#endif
+
 #if CIRCUITPY_IMAGECAPTURE
 #include "cam.h"
 #endif
@@ -77,11 +83,23 @@
 
 #include "esp_debug_helpers.h"
 
+#include "esp_ipc.h"
+
 #ifdef CONFIG_SPIRAM
 #include "esp32/spiram.h"
 #endif
 
+// Heap sizes for when there is no external RAM for CircuitPython to use
+// exclusively.
+#ifdef CONFIG_IDF_TARGET_ESP32S2
 #define HEAP_SIZE (48 * 1024)
+#endif
+#ifdef CONFIG_IDF_TARGET_ESP32S3
+#define HEAP_SIZE (176 * 1024)
+#endif
+#ifdef CONFIG_IDF_TARGET_ESP32C3
+#define HEAP_SIZE (88 * 1024)
+#endif
 
 uint32_t *heap;
 uint32_t heap_size;
@@ -93,12 +111,24 @@ TaskHandle_t circuitpython_task = NULL;
 
 extern void esp_restart(void) NORETURN;
 
-STATIC void tick_timer_cb(void *arg) {
+STATIC void tick_on_cp_core(void *arg) {
     supervisor_tick();
 
     // CircuitPython's VM is run in a separate FreeRTOS task from timer callbacks. So, we have to
     // notify the main task every time in case it's waiting for us.
     xTaskNotifyGive(circuitpython_task);
+}
+
+// This function may happen on the PRO core when CP is on the APP core. So, make
+// sure we run on the CP core.
+STATIC void tick_timer_cb(void *arg) {
+    #if defined(CONFIG_FREERTOS_UNICORE) && CONFIG_FREERTOS_UNICORE
+    tick_on_cp_core(arg);
+    #else
+    // This only blocks until the start of the function. That's ok since the PRO
+    // core shouldn't care what we do.
+    esp_ipc_call(CONFIG_ESP_MAIN_TASK_AFFINITY, tick_on_cp_core, NULL);
+    #endif
 }
 
 void sleep_timer_cb(void *arg);
@@ -184,6 +214,9 @@ safe_mode_t port_init(void) {
         case ESP_RST_PANIC:
             return HARD_CRASH;
         case ESP_RST_INT_WDT:
+            // The interrupt watchdog is used internally to make sure that latency sensitive
+            // interrupt code isn't blocked. User watchdog resets come through ESP_RST_WDT.
+            return WATCHDOG_RESET;
         case ESP_RST_WDT:
         default:
             break;
@@ -252,17 +285,10 @@ void reset_port(void) {
     #if CIRCUITPY_WATCHDOG
     watchdog_reset();
     #endif
-
-    #if CIRCUITPY_WIFI
-    wifi_reset();
-    #endif
-
-    #if CIRCUITPY_SOCKETPOOL
-    socket_reset();
-    #endif
 }
 
 void reset_to_bootloader(void) {
+    common_hal_mcu_on_next_reset(RUNMODE_BOOTLOADER);
     esp_restart();
 }
 

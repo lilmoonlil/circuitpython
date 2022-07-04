@@ -32,18 +32,14 @@
 #define MICROPY_HW_NEOPIXEL (&pin_GPIO39)
 #define CIRCUITPY_STATUS_LED_POWER (&pin_GPIO38)
 
-#define CIRCUITPY_BOOT_BUTTON (&pin_GPIO0)
+#define CIRCUITPY_BOARD_I2C         (2)
+#define CIRCUITPY_BOARD_I2C_PIN     {{.scl = &pin_GPIO6, .sda = &pin_GPIO7}, \
+                                     {.scl = &pin_GPIO40, .sda = &pin_GPIO41}}
 
-#define BOARD_USER_SAFE_MODE_ACTION translate("pressing boot button at start up.\n")
+#define CIRCUITPY_BOARD_SPI         (1)
+#define CIRCUITPY_BOARD_SPI_PIN     {{.clock = &pin_GPIO36, .mosi = &pin_GPIO35, .miso = &pin_GPIO37}}
 
-#define AUTORESET_DELAY_MS 500
+#define CIRCUITPY_BOARD_UART        (1)
+#define CIRCUITPY_BOARD_UART_PIN    {{.tx = &pin_GPIO5, .rx = &pin_GPIO16}}
 
-#define DEFAULT_I2C_BUS_SCL (&pin_GPIO6)
-#define DEFAULT_I2C_BUS_SDA (&pin_GPIO7)
-
-#define DEFAULT_SPI_BUS_SCK (&pin_GPIO36)
-#define DEFAULT_SPI_BUS_MOSI (&pin_GPIO35)
-#define DEFAULT_SPI_BUS_MISO (&pin_GPIO37)
-
-#define DEFAULT_UART_BUS_RX (&pin_GPIO16)
-#define DEFAULT_UART_BUS_TX (&pin_GPIO5)
+#define DOUBLE_TAP_PIN (&pin_GPIO10)

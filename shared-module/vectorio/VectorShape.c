@@ -4,6 +4,7 @@
 #include "shared-module/vectorio/__init__.h"
 #include "shared-bindings/vectorio/VectorShape.h"
 
+#include "py/misc.h"
 #include "py/runtime.h"
 #include "shared-bindings/time/__init__.h"
 #include "shared-bindings/displayio/ColorConverter.h"
@@ -61,21 +62,8 @@
     (u32 & 0x2        ? '1' : '0'), \
     (u32 & 0x1        ? '1' : '0')
 
-
-inline __attribute__((always_inline))
-static int32_t max(int32_t a, int32_t b) {
-    return a > b ? a : b;
-}
-
-inline __attribute__((always_inline))
-static uint32_t min(uint32_t a, uint32_t b) {
-    return a < b ? a : b;
-}
-
 static void short_bound_check(mp_int_t i, qstr name) {
-    if (i < SHRT_MIN || i > SHRT_MAX) {
-        mp_raise_ValueError_varg(translate("%q must be between %d and %d"), name, SHRT_MIN, SHRT_MAX);
-    }
+    mp_arg_validate_int_range(i, SHRT_MIN, SHRT_MAX, name);
 }
 
 inline __attribute__((always_inline))
@@ -287,9 +275,7 @@ void common_hal_vectorio_vector_shape_set_location(vectorio_vector_shape_t *self
     size_t tuple_len = 0;
     mp_obj_t *tuple_items;
     mp_obj_tuple_get(xy, &tuple_len, &tuple_items);
-    if (tuple_len != 2) {
-        mp_raise_TypeError(translate("(x,y) integers required"));
-    }
+    mp_arg_validate_length(tuple_len, 2, MP_QSTR_location);
 
     mp_int_t x;
     mp_int_t y;
@@ -456,7 +442,7 @@ bool vectorio_vector_shape_fill_area(vectorio_vector_shape_t *self, const _displ
         mp_obj_get_type_str(self->ishape.shape),
         (overlap.x2 - overlap.x1) * (overlap.y2 - overlap.y1),
         (double)((end - start) / 1000000.0),
-        (double)(max(1, pixels * (1000000000.0 / (end - start)))),
+        (double)(MAX(1, pixels * (1000000000.0 / (end - start)))),
         (double)(pixel_time / 1000.0),
         (double)(pixel_time / 1000.0 / pixels)
         );
@@ -514,7 +500,7 @@ displayio_area_t *vectorio_vector_shape_get_refresh_areas(vectorio_vector_shape_
                 union_size, dirty_size, current_size, overlap_size, (int32_t)union_size - dirty_size - current_size + overlap_size
                 );
 
-            if ((int32_t)union_size - dirty_size - current_size + overlap_size <= min(dirty_size, current_size)) {
+            if ((int32_t)union_size - dirty_size - current_size + overlap_size <= MIN(dirty_size, current_size)) {
                 // The excluded / non-overlapping area from the disjoint dirty and current areas is smaller
                 // than the smallest area we need to draw. Redrawing the overlapping area would cost more
                 // than just drawing the union disjoint area once.

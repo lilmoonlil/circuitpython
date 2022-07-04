@@ -31,7 +31,7 @@
 #include "py/runtime.h"
 
 #include "shared-bindings/microcontroller/__init__.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 #include "shared-bindings/microcontroller/Pin.h"
 
 // I2C timing specs for the H7 and F7
@@ -120,7 +120,7 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
         if (i2c_taken) {
             mp_raise_ValueError(translate("Hardware busy, try alternative pins"));
         } else {
-            mp_raise_ValueError_varg(translate("Invalid %q pin selection"), MP_QSTR_I2C);
+            raise_ValueError_invalid_pins();
         }
     }
 
@@ -155,7 +155,7 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     } else if (frequency == 100000) {
         self->handle.Init.Timing = CPY_I2CSTANDARD_TIMINGR;
     } else {
-        mp_raise_ValueError(translate("Unsupported baudrate"));
+        mp_arg_error_invalid(MP_QSTR_frequency);
     }
     #else
     self->handle.Init.ClockSpeed = frequency;
@@ -171,7 +171,7 @@ void common_hal_busio_i2c_construct(busio_i2c_obj_t *self,
     self->handle.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
     self->handle.State = HAL_I2C_STATE_RESET;
     if (HAL_I2C_Init(&(self->handle)) != HAL_OK) {
-        mp_raise_RuntimeError(translate("I2C Init Error"));
+        mp_raise_RuntimeError(translate("I2C init error"));
     }
     common_hal_mcu_pin_claim(sda);
     common_hal_mcu_pin_claim(scl);
@@ -246,7 +246,7 @@ void common_hal_busio_i2c_unlock(busio_i2c_obj_t *self) {
     self->has_lock = false;
 }
 
-uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr,
+STATIC uint8_t _common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr,
     const uint8_t *data, size_t len, bool transmit_stop_bit) {
     HAL_StatusTypeDef result;
     if (!transmit_stop_bit) {
@@ -271,6 +271,11 @@ uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr,
     return result == HAL_OK ? 0 : MP_EIO;
 }
 
+uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr,
+    const uint8_t *data, size_t len) {
+    return _common_hal_busio_i2c_write(self, addr, data, len, true);
+}
+
 uint8_t common_hal_busio_i2c_read(busio_i2c_obj_t *self, uint16_t addr,
     uint8_t *data, size_t len) {
     if (!self->frame_in_prog) {
@@ -286,6 +291,16 @@ uint8_t common_hal_busio_i2c_read(busio_i2c_obj_t *self, uint16_t addr,
         self->frame_in_prog = false;
         return result;
     }
+}
+
+uint8_t common_hal_busio_i2c_write_read(busio_i2c_obj_t *self, uint16_t addr,
+    uint8_t *out_data, size_t out_len, uint8_t *in_data, size_t in_len) {
+    uint8_t result = _common_hal_busio_i2c_write(self, addr, out_data, out_len, false);
+    if (result != 0) {
+        return result;
+    }
+
+    return common_hal_busio_i2c_read(self, addr, in_data, in_len);
 }
 
 STATIC void i2c_clock_enable(uint8_t mask) {

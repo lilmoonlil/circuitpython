@@ -54,6 +54,13 @@ extern const mp_obj_type_t mp_type_bleio_BluetoothError;
 extern const mp_obj_type_t mp_type_bleio_RoleError;
 extern const mp_obj_type_t mp_type_bleio_SecurityError;
 
+// Resets all user created BLE state in preparation for the heap disappearing.
+// It will maintain BLE workflow and connections.
+void bleio_user_reset(void);
+
+// Completely resets the BLE stack including BLE connections.
+void bleio_reset(void);
+
 extern mp_obj_t bleio_set_adapter(mp_obj_t adapter_obj);
 
 NORETURN void mp_raise_bleio_BluetoothError(const compressed_string_t *msg, ...);

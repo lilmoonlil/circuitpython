@@ -37,7 +37,7 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-module/audiocore/__init__.h"
 #include "bindings/rp2pio/StateMachine.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 const uint16_t i2s_program[] = {
 // ; Load the next set of samples
@@ -127,14 +127,15 @@ void common_hal_audiobusio_i2sout_construct(audiobusio_i2sout_obj_t *self,
         0, 0, // in pulls
         NULL, 0, 0, 0x1f, // set pins
         bit_clock, 2, 0, 0x1f, // sideset pins
-        NULL, // jump pin
+        false, // No sideset enable
+        NULL, PULL_NONE, // jump pin
         0, // wait gpio pins
         true, // exclusive pin use
         false, 32, false, // shift out left to start with MSB
         false, // Wait for txstall
         false, 32, false, // in settings
         false, // Not user-interruptible.
-        false); // No sideset enable
+        0, -1); // wrap settings
 
     self->playing = false;
     audio_dma_init(&self->dma);

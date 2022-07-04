@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: 0.1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2021-01-04 12:55-0600\n"
-"PO-Revision-Date: 2021-12-13 05:53+0000\n"
-"Last-Translator: Jeff Epler <jepler@gmail.com>\n"
+"PO-Revision-Date: 2022-06-30 22:19+0000\n"
+"Last-Translator: Maxime Leroy <lisacintosh@gmail.com>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.10-dev\n"
+"X-Generator: Weblate 4.13.1-dev\n"
 
 #: main.c
 msgid ""
@@ -28,10 +28,11 @@ msgstr ""
 #: main.c
 msgid ""
 "\n"
-"Code stopped by auto-reload.\n"
+"Code stopped by auto-reload. Reloading soon.\n"
 msgstr ""
 "\n"
-"Exécution du code arrêté par l'auto-rechargement.\n"
+"Le code a été arrêté par l'actualisation automatique. Rechargement "
+"prochain.\n"
 
 #: supervisor/shared/safe_mode.c
 msgid ""
@@ -77,9 +78,23 @@ msgstr ""
 "%d broches d'adresse, %d broches RGB et %d pour tile indique une hauteur de "
 "%d, et non %d"
 
+#: ports/cxd56/common-hal/analogio/AnalogOut.c ports/cxd56/common-hal/rtc/RTC.c
+#: ports/espressif/common-hal/rtc/RTC.c
+#: ports/mimxrt10xx/common-hal/analogio/AnalogOut.c
+#: ports/mimxrt10xx/common-hal/rtc/RTC.c
+#: ports/nrf/common-hal/analogio/AnalogOut.c ports/nrf/common-hal/rtc/RTC.c
+#: ports/raspberrypi/common-hal/analogio/AnalogOut.c
+#: ports/raspberrypi/common-hal/rtc/RTC.c ports/stm/common-hal/rtc/RTC.c
+msgid "%q"
+msgstr "%q"
+
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q and %q contain duplicate pins"
 msgstr "%q et %q contiennent des broches en double"
+
+#: ports/atmel-samd/common-hal/audioio/AudioOut.c
+msgid "%q and %q must be different"
+msgstr "%q et %q doivent être différents"
 
 #: shared-bindings/microcontroller/Pin.c
 msgid "%q contains duplicate pins"
@@ -93,12 +108,7 @@ msgstr "Échec de %q : %d"
 msgid "%q in use"
 msgstr "%q en cours d'utilisation"
 
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-#: ports/cxd56/common-hal/pulseio/PulseIn.c
-#: ports/nrf/common-hal/pulseio/PulseIn.c
-#: ports/raspberrypi/common-hal/pulseio/PulseIn.c
-#: ports/stm/common-hal/pulseio/PulseIn.c py/obj.c py/objstr.c
-#: py/objstrunicode.c
+#: py/obj.c py/objstr.c py/objstrunicode.c
 msgid "%q index out of range"
 msgstr "index %q hors de portée"
 
@@ -106,17 +116,41 @@ msgstr "index %q hors de portée"
 msgid "%q indices must be integers, not %s"
 msgstr "les indices %q doivent être des entiers, pas %s"
 
+#: shared-module/bitbangio/SPI.c
+msgid "%q init failed"
+msgstr "échec de l'initialisation %q"
+
+#: py/argcheck.c
+msgid "%q length must be %d"
+msgstr "La longeur de %q doit être %d"
+
 #: py/argcheck.c
 msgid "%q length must be %d-%d"
 msgstr "La longueur de %q doit être %d-%d"
 
-#: shared-bindings/usb_hid/Device.c
+#: py/argcheck.c
+msgid "%q length must be <= %d"
+msgstr "La longeur de %q doit être <= %d"
+
+#: py/argcheck.c
+msgid "%q length must be >= %d"
+msgstr "La longeur de %q doit être >= %d"
+
+#: shared-bindings/busio/I2C.c
 msgid "%q length must be >= 1"
 msgstr "La longueur de %q doit être >= 1"
 
 #: py/argcheck.c
+msgid "%q must be %d"
+msgstr "%q doit être %d"
+
+#: py/argcheck.c
 msgid "%q must be %d-%d"
 msgstr "%q doit être %d-%d"
+
+#: shared-bindings/displayio/Display.c
+msgid "%q must be 1 when %q is True"
+msgstr "%q doit être 1 quand %q est True"
 
 #: py/argcheck.c shared-bindings/gifio/GifWriter.c
 msgid "%q must be <= %d"
@@ -126,14 +160,10 @@ msgstr "%q doit être <= %d"
 msgid "%q must be >= %d"
 msgstr "%q doit être >= %d"
 
-#: py/argcheck.c shared-bindings/memorymonitor/AllocationAlarm.c
+#: py/argcheck.c
 msgid "%q must be >= 0"
 msgstr "%q doit être >= 0"
 
-#: shared-bindings/_bleio/CharacteristicBuffer.c
-#: shared-bindings/_bleio/PacketBuffer.c shared-bindings/displayio/Group.c
-#: shared-bindings/displayio/Shape.c
-#: shared-bindings/memorymonitor/AllocationAlarm.c
 #: shared-bindings/vectorio/Circle.c shared-bindings/vectorio/Rectangle.c
 msgid "%q must be >= 1"
 msgstr "%q doit être >= 1"
@@ -142,14 +172,9 @@ msgstr "%q doit être >= 1"
 msgid "%q must be a string"
 msgstr "%q doit être une chaîne de caractères"
 
-#: shared-module/vectorio/Polygon.c
-msgid "%q must be a tuple of length 2"
-msgstr "%q doit être un tuple de longueur 2"
-
-#: ports/espressif/common-hal/imagecapture/ParallelImageCapture.c
-#: shared-module/vectorio/VectorShape.c
-msgid "%q must be between %d and %d"
-msgstr "%q doit être entre %d et %d"
+#: py/argcheck.c
+msgid "%q must be an int"
+msgstr "%q doit être un entier"
 
 #: py/argcheck.c
 msgid "%q must be of type %q"
@@ -157,7 +182,7 @@ msgstr "%q doit être du type %q"
 
 #: shared-bindings/digitalio/Pull.c
 msgid "%q must be of type %q or None"
-msgstr ""
+msgstr "%q doit être du type %q ou None"
 
 #: ports/atmel-samd/common-hal/busio/UART.c
 msgid "%q must be power of 2"
@@ -167,7 +192,11 @@ msgstr "%q doit être une puissance de 2"
 msgid "%q out of bounds"
 msgstr "%q est hors limites"
 
+#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
+#: ports/cxd56/common-hal/pulseio/PulseIn.c
+#: ports/nrf/common-hal/pulseio/PulseIn.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
+#: ports/stm/common-hal/pulseio/PulseIn.c py/argcheck.c
 #: shared-bindings/canio/Match.c
 msgid "%q out of range"
 msgstr "%q est hors de porté"
@@ -175,10 +204,6 @@ msgstr "%q est hors de porté"
 #: ports/atmel-samd/common-hal/microcontroller/Pin.c
 msgid "%q pin invalid"
 msgstr "broche %q invalide"
-
-#: shared-bindings/fontio/BuiltinFont.c
-msgid "%q should be an int"
-msgstr "%q doit être un chiffre entier (int)"
 
 #: shared-bindings/usb_hid/Device.c
 msgid "%q with a report ID of 0 must be of length 1"
@@ -342,10 +367,6 @@ msgstr "'yield from' dans une fonction async"
 msgid "'yield' outside function"
 msgstr "'yield' dehors d'une fonction"
 
-#: shared-module/vectorio/VectorShape.c
-msgid "(x,y) integers required"
-msgstr "Des entiers (x,y) requis"
-
 #: py/compile.c
 msgid "*x must be assignment target"
 msgstr "*x doit être la cible de l'assignement"
@@ -380,10 +401,6 @@ msgstr "ADC2 est utilisé pars le Wifi"
 #, c-format
 msgid "Address must be %d bytes long"
 msgstr "L'adresse doit être longue de %d octets"
-
-#: shared-bindings/_bleio/Address.c
-msgid "Address type out of range"
-msgstr "Type d'adresse hors portée"
 
 #: ports/espressif/common-hal/canio/CAN.c
 msgid "All CAN peripherals are in use"
@@ -427,7 +444,6 @@ msgstr "Tout les canaux sont utilisés"
 msgid "All event channels in use"
 msgstr "Tous les canaux d'événements sont utilisés"
 
-#: ports/raspberrypi/common-hal/pulseio/PulseIn.c
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "All state machines in use"
 msgstr "Tous les automates finis sont utilisés"
@@ -457,6 +473,7 @@ msgstr "Tous les minuteurs pour cette broche sont utilisés"
 msgid "All timers in use"
 msgstr "Tous les minuteurs sont utilisés"
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Already advertising."
 msgstr "S'annonce déjà."
@@ -473,27 +490,6 @@ msgstr "Déjà en cours d'exécution"
 #: ports/espressif/common-hal/wifi/Radio.c
 msgid "Already scanning for wifi networks"
 msgstr "Déjà à la recherche des réseaux wifi"
-
-#: ports/cxd56/common-hal/analogio/AnalogIn.c
-msgid "AnalogIn not supported on given pin"
-msgstr "'AnalogOut' n'est pas supporté sur la broche indiquée"
-
-#: ports/cxd56/common-hal/analogio/AnalogOut.c
-#: ports/mimxrt10xx/common-hal/analogio/AnalogOut.c
-#: ports/nrf/common-hal/analogio/AnalogOut.c
-#: ports/raspberrypi/common-hal/analogio/AnalogOut.c
-msgid "AnalogOut functionality not supported"
-msgstr "Fonctionnalité AnalogOut non supportée"
-
-#: shared-bindings/analogio/AnalogOut.c
-msgid "AnalogOut is only 16 bits. Value must be less than 65536."
-msgstr ""
-"AnalogOut est seulement 16 bits. Les valeurs doivent être inférieures à "
-"65536."
-
-#: ports/atmel-samd/common-hal/analogio/AnalogOut.c
-msgid "AnalogOut not supported on given pin"
-msgstr "'AnalogOut' n'est pas supporté sur la broche indiquée"
 
 #: ports/stm/common-hal/audiopwmio/PWMAudioOut.c
 msgid "Another PWMAudioOut is already active"
@@ -535,7 +531,7 @@ msgstr "La conversion audio n'est pas implémentée"
 msgid "AuthMode.OPEN is not used with password"
 msgstr "AuthMode.OPEN n'est pas utilisé avec un mot de passe"
 
-#: shared-bindings/wifi/Radio.c
+#: shared-bindings/wifi/Radio.c supervisor/shared/web_workflow/web_workflow.c
 msgid "Authentication failure"
 msgstr "Échec d'authentification"
 
@@ -568,11 +564,6 @@ msgstr "Bit clock et word select doivent êtres sur des broches séquentielles"
 msgid "Bit clock and word select must share a clock unit"
 msgstr "'bit clock' et 'word select' doivent partager une horloge"
 
-#: shared-bindings/rgbmatrix/RGBMatrix.c
-#, c-format
-msgid "Bit depth must be from 1 to 6 inclusive, not %d"
-msgstr "Bit depth doit être entre 1 et 6 inclusivement, et non %d"
-
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Bit depth must be multiple of 8."
 msgstr "La profondeur de bit doit être un multiple de 8."
@@ -595,14 +586,10 @@ msgstr "Les deux broches doivent supporter les interruptions matérielles"
 
 #: shared-bindings/displayio/Display.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
-#: shared-bindings/is31fl3741/IS31FL3741.c
+#: shared-bindings/is31fl3741/FrameBuffer.c
 #: shared-bindings/rgbmatrix/RGBMatrix.c
 msgid "Brightness must be 0-1.0"
 msgstr "La luminosité doit être de 0 à 1.0"
-
-#: shared-bindings/supervisor/__init__.c
-msgid "Brightness must be between 0 and 255"
-msgstr "La luminosité doit être entre 0 et 255"
 
 #: shared-bindings/displayio/Display.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
@@ -618,11 +605,6 @@ msgstr "Tampon + décalage trop petit %d %d %d"
 msgid "Buffer elements must be 4 bytes long or less"
 msgstr "Éléments du tampon doit être 4 octets ou moins"
 
-#: shared-module/usb_hid/Device.c
-#, c-format
-msgid "Buffer incorrect size. Should be %d bytes."
-msgstr "Tampon de taille incorrect. Devrait être de %d octets."
-
 #: shared-bindings/framebufferio/FramebufferDisplay.c
 msgid "Buffer is not a bytearray."
 msgstr "Le tampon n'est pas un 'bytearray'."
@@ -632,7 +614,6 @@ msgstr "Le tampon n'est pas un 'bytearray'."
 msgid "Buffer is too small"
 msgstr "Le tampon est trop petit"
 
-#: ports/nrf/common-hal/audiopwmio/PWMAudioOut.c
 #: ports/stm/common-hal/audiopwmio/PWMAudioOut.c
 #, c-format
 msgid "Buffer length %d too big. It must be less than %d"
@@ -643,13 +624,9 @@ msgstr "La longueur du tampon %d est trop grande. Il doit être inférieur à %d
 msgid "Buffer length must be a multiple of 512"
 msgstr "La longueur de la mémoire tampon doit être un multiple de 512"
 
-#: ports/stm/common-hal/sdioio/SDCard.c
+#: ports/stm/common-hal/sdioio/SDCard.c shared-bindings/floppyio/__init__.c
 msgid "Buffer must be a multiple of 512 bytes"
 msgstr "La mémoire tampon doit être un multiple de 512"
-
-#: shared-bindings/bitbangio/I2C.c shared-bindings/busio/I2C.c
-msgid "Buffer must be at least length 1"
-msgstr "Le tampon doit être de longueur au moins 1"
 
 #: shared-bindings/_bleio/PacketBuffer.c
 #, c-format
@@ -672,10 +649,6 @@ msgstr "La broche %d du bus est déjà utilisée"
 msgid "Byte buffer must be 16 bytes."
 msgstr "Le tampon doit être de 16 octets."
 
-#: shared-bindings/alarm/SleepMemory.c shared-bindings/nvm/ByteArray.c
-msgid "Bytes must be between 0 and 255."
-msgstr "Les octets 'bytes' doivent être entre 0 et 255."
-
 #: shared-bindings/aesio/aes.c
 msgid "CBC blocks must be multiples of 16 bytes"
 msgstr "Les blocs CBC doivent être des multiples de 16 octets"
@@ -691,6 +664,10 @@ msgstr "CRC ou somme de contrôle invalide"
 #: py/objtype.c
 msgid "Call super().__init__() before accessing native object."
 msgstr "Appelez super().__init__() avant d'accéder à l'objet natif."
+
+#: ports/cxd56/common-hal/camera/Camera.c
+msgid "Camera init"
+msgstr "Initialisation de la caméra"
 
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Can only alarm on RTC IO from deep sleep."
@@ -708,6 +685,7 @@ msgstr ""
 "L'alarme peut seulement être sur deux broches basses depuis le someil "
 "profond."
 
+#: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nrf/common-hal/_bleio/Characteristic.c
 msgid "Can't set CCCD on local Characteristic"
 msgstr "Impossible de définir CCCD sur une caractéristique locale"
@@ -745,17 +723,9 @@ msgstr ""
 "Impossible d'avoir des réponses d'analyse pour les publicités étendues et "
 "connectables."
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
-msgid "Cannot output both channels on the same pin"
-msgstr "Les 2 canaux de sortie ne peuvent être sur la même broche"
-
 #: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot pull on input-only pin."
 msgstr "Ne peut tirer ('pull') sur une broche d'entrée ('input') seule."
-
-#: shared-module/bitbangio/SPI.c
-msgid "Cannot read without MISO pin."
-msgstr "Impossible de lire sans broche MISO."
 
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Cannot record to a file"
@@ -768,9 +738,9 @@ msgstr "Ne peut démonter '/' quand est visible par USB."
 #: ports/atmel-samd/common-hal/microcontroller/__init__.c
 #: ports/cxd56/common-hal/microcontroller/__init__.c
 #: ports/mimxrt10xx/common-hal/microcontroller/__init__.c
-msgid "Cannot reset into bootloader because no bootloader is present."
+msgid "Cannot reset into bootloader because no bootloader is present"
 msgstr ""
-"Ne peut être redémarré vers le bootloader car il n'y a pas de bootloader."
+"Impossible de redémarrer dans le bootloader puisque aucun n'est présent"
 
 #: ports/espressif/common-hal/socketpool/Socket.c
 msgid "Cannot set socket options"
@@ -791,21 +761,20 @@ msgid "Cannot subclass slice"
 msgstr "On ne peut faire de sous-classes de tranches"
 
 #: shared-module/bitbangio/SPI.c
-msgid "Cannot transfer without MOSI and MISO pins."
-msgstr "Pas de transfert sans broches MOSI et MISO."
+msgid "Cannot transfer without MOSI and MISO pins"
+msgstr ""
 
 #: shared-bindings/pwmio/PWMOut.c
 msgid "Cannot vary frequency on a timer that is already in use"
 msgstr "Impossible de faire varier la fréquence sur un minuteur déjà utilisée"
 
-#: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 #: ports/nrf/common-hal/alarm/pin/PinAlarm.c
+msgid "Cannot wake on pin edge, only level"
+msgstr ""
+
+#: ports/espressif/common-hal/alarm/pin/PinAlarm.c
 msgid "Cannot wake on pin edge. Only level."
 msgstr "Ne peut reveillé sur le board de broche. Seuleument à niveau."
-
-#: shared-module/bitbangio/SPI.c
-msgid "Cannot write without MOSI pin."
-msgstr "Impossible d'écrire sans broche MOSI."
 
 #: shared-bindings/_bleio/CharacteristicBuffer.c
 msgid "CharacteristicBuffer writing not provided"
@@ -819,10 +788,6 @@ msgstr "Le code principal de CircuitPython s'est écrasé durement. Oups !\n"
 msgid "CircuitPython was unable to allocate the heap."
 msgstr "CircuitPython n'as pu faire l'allocation de la pile."
 
-#: shared-module/bitbangio/SPI.c
-msgid "Clock pin init failed."
-msgstr "Échec de l'initialization de la broche d'horloge."
-
 #: shared-module/bitbangio/I2C.c
 msgid "Clock stretch too long"
 msgstr "Période de l'horloge trop longue"
@@ -830,11 +795,6 @@ msgstr "Période de l'horloge trop longue"
 #: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
 msgid "Clock unit in use"
 msgstr "Horloge en cours d'utilisation"
-
-#: shared-bindings/displayio/FourWire.c shared-bindings/displayio/I2CDisplay.c
-#: shared-bindings/paralleldisplay/ParallelBus.c
-msgid "Command must be an int between 0 and 255"
-msgstr "La commande doit être un chiffre entier entre 0 et 255"
 
 #: shared-bindings/_bleio/Connection.c
 msgid ""
@@ -847,35 +807,6 @@ msgstr ""
 #: py/persistentcode.c
 msgid "Corrupt .mpy file"
 msgstr "Fichier .mpy corrompu"
-
-#: ports/cxd56/common-hal/camera/Camera.c
-msgid "Could not initialize Camera"
-msgstr "Impossible d'initialiser Camera"
-
-#: ports/cxd56/common-hal/gnss/GNSS.c
-msgid "Could not initialize GNSS"
-msgstr "Impossible d'initialiser GNSS"
-
-#: ports/cxd56/common-hal/sdioio/SDCard.c
-msgid "Could not initialize SDCard"
-msgstr "Impossible d'initialiser la carte SD"
-
-#: ports/atmel-samd/common-hal/busio/UART.c ports/cxd56/common-hal/busio/UART.c
-#: ports/espressif/common-hal/busio/UART.c
-msgid "Could not initialize UART"
-msgstr "Impossible d'initialiser UART"
-
-#: ports/stm/common-hal/pwmio/PWMOut.c
-msgid "Could not re-init channel"
-msgstr "Impossible de réinitialiser le canal"
-
-#: ports/stm/common-hal/pwmio/PWMOut.c
-msgid "Could not re-init timer"
-msgstr "Impossible de réinitialiser le minuteur"
-
-#: ports/stm/common-hal/pwmio/PWMOut.c
-msgid "Could not restart PWM"
-msgstr "Impossible de redémarrer PWM"
 
 #: ports/espressif/common-hal/neopixel_write/__init__.c
 msgid "Could not retrieve clock"
@@ -896,20 +827,6 @@ msgstr "Impossible de démarrer l'interruption, RX occupé"
 #: shared-module/audiomp3/MP3Decoder.c
 msgid "Couldn't allocate decoder"
 msgstr "Impossible d'allouer le décodeur"
-
-#: shared-module/audiocore/WaveFile.c shared-module/audiomixer/Mixer.c
-#: shared-module/audiomp3/MP3Decoder.c
-msgid "Couldn't allocate first buffer"
-msgstr "Impossible d'allouer le premier tampon"
-
-#: shared-module/audiomp3/MP3Decoder.c
-msgid "Couldn't allocate input buffer"
-msgstr "Impossible d'allouer le tampon d'entrée"
-
-#: shared-module/audiocore/WaveFile.c shared-module/audiomixer/Mixer.c
-#: shared-module/audiomp3/MP3Decoder.c
-msgid "Couldn't allocate second buffer"
-msgstr "Impossible d'allouer le deuxième tampon"
 
 #: supervisor/shared/safe_mode.c
 msgid "Crash into the HardFault_Handler."
@@ -936,10 +853,12 @@ msgstr "La broche 'Data 0' doit être aligné sur l'octet"
 msgid "Data chunk must follow fmt chunk"
 msgstr "Un bloc de données doit suivre un bloc fmt"
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Data not supported with directed advertising"
 msgstr "Les données ne sont pas supportées avec les annonces directes"
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Data too large for advertisement packet"
 msgstr "Données trop volumineuses pour un paquet d'avertissement"
@@ -956,10 +875,6 @@ msgstr "La capacité de destination est plus petite que 'destination_length'."
 #: ports/nrf/common-hal/audiobusio/I2SOut.c
 msgid "Device in use"
 msgstr "Appareil utilisé"
-
-#: ports/cxd56/common-hal/digitalio/DigitalInOut.c
-msgid "DigitalInOut not supported on given pin"
-msgstr "DigitalInOut non pris en charge sur la broche donnée"
 
 #: shared-bindings/displayio/Display.c
 #: shared-bindings/framebufferio/FramebufferDisplay.c
@@ -1017,11 +932,7 @@ msgstr "Attendu un %q"
 msgid "Expected an alarm"
 msgstr "Une alarme était prévue"
 
-#: shared-module/adafruit_pixelbuf/PixelBuf.c
-#, c-format
-msgid "Expected tuple of length %d, got %d"
-msgstr "Tuple de longueur %d attendu, obtenu %d"
-
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Extended advertisements with scan response not supported."
 msgstr ""
@@ -1048,21 +959,9 @@ msgstr "Échec de l'envoi de la commande."
 msgid "Failed to acquire mutex, err 0x%04x"
 msgstr "Echec de l'obtention de mutex, err 0x%04x"
 
-#: ports/mimxrt10xx/common-hal/busio/UART.c ports/nrf/common-hal/busio/UART.c
-#: ports/raspberrypi/common-hal/busio/UART.c
-msgid "Failed to allocate RX buffer"
-msgstr "Echec de l'allocation du tampon RX"
-
-#: ports/atmel-samd/common-hal/busio/UART.c
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-#: ports/cxd56/common-hal/pulseio/PulseIn.c
-#: ports/espressif/common-hal/pulseio/PulseIn.c
-#: ports/nrf/common-hal/pulseio/PulseIn.c
-#: ports/raspberrypi/common-hal/pulseio/PulseIn.c
-#: ports/stm/common-hal/pulseio/PulseIn.c
-#, c-format
-msgid "Failed to allocate RX buffer of %d bytes"
-msgstr "Echec de l'allocation de %d octets du tampon RX"
+#: shared-module/rgbmatrix/RGBMatrix.c
+msgid "Failed to allocate %q buffer"
+msgstr "Échec d'allocation du tampon %q"
 
 #: ports/espressif/common-hal/wifi/__init__.c
 msgid "Failed to allocate Wifi memory"
@@ -1076,6 +975,7 @@ msgstr "Impossible d'allouer la mémoire pour le scan wifi"
 msgid "Failed to buffer the sample"
 msgstr "Échec du tamponage de l'échantillon"
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Failed to connect: internal error"
 msgstr "Impossible de se connecter : erreur interne"
@@ -1133,10 +1033,12 @@ msgstr ""
 msgid "Format not supported"
 msgstr "Format non supporté"
 
-#: shared-module/framebufferio/FramebufferDisplay.c
-#, c-format
-msgid "Framebuffer requires %d bytes"
-msgstr "FrameBuffer nécessite %d octets"
+#: ports/mimxrt10xx/common-hal/microcontroller/Processor.c
+msgid ""
+"Frequency must be 24, 150, 396, 450, 528, 600, 720, 816, 912, 960 or 1008 Mhz"
+msgstr ""
+"La fréquence doit être 24, 150, 396, 450, 528, 600, 720, 816, 912, 960 ou "
+"1008 MHz"
 
 #: shared-bindings/pwmio/PWMOut.c
 msgid "Frequency must match existing PWMOut using this timer"
@@ -1149,6 +1051,10 @@ msgstr ""
 msgid "Function requires lock"
 msgstr "La fonction nécessite un verrou ('lock')"
 
+#: ports/cxd56/common-hal/gnss/GNSS.c
+msgid "GNSS init"
+msgstr "Initialisation GNSS"
+
 #: ports/espressif/bindings/espidf/__init__.c ports/espressif/esp_error.c
 msgid "Generic Failure"
 msgstr "Échec génerique"
@@ -1158,6 +1064,13 @@ msgstr "Échec génerique"
 #: shared-bindings/framebufferio/FramebufferDisplay.c
 msgid "Group already used"
 msgstr "Groupe déjà utilisé"
+
+#: ports/atmel-samd/common-hal/busio/SPI.c ports/cxd56/common-hal/busio/SPI.c
+#: ports/espressif/common-hal/busio/SPI.c
+#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/nrf/common-hal/busio/SPI.c
+#: ports/raspberrypi/common-hal/busio/SPI.c
+msgid "Half duplex SPI is not implemented"
+msgstr ""
 
 #: ports/mimxrt10xx/common-hal/busio/SPI.c ports/stm/common-hal/busio/I2C.c
 #: ports/stm/common-hal/busio/SPI.c ports/stm/common-hal/canio/CAN.c
@@ -1169,16 +1082,12 @@ msgstr "Matériel occupé, essayez d'autres broches"
 msgid "Hardware in use, try alternative pins"
 msgstr "Matériel utilisé, essayez d'autres broches"
 
-#: shared-bindings/wifi/Radio.c
-msgid "Hostname must be between 1 and 253 characters"
-msgstr "Hostname doit être entre 1 et 253 caractères"
-
 #: extmod/vfs_posix_file.c py/objstringio.c
 msgid "I/O operation on closed file"
 msgstr "Opération d'E/S sur un fichier fermé"
 
 #: ports/stm/common-hal/busio/I2C.c
-msgid "I2C Init Error"
+msgid "I2C init error"
 msgstr "Erreur d'initialisation I2C"
 
 #: ports/raspberrypi/common-hal/busio/I2C.c
@@ -1297,74 +1206,37 @@ msgstr "Erreur interne"
 msgid "Internal error #%d"
 msgstr "Erreur interne #%d"
 
-#: shared-bindings/sdioio/SDCard.c shared-module/usb_hid/Device.c
+#: supervisor/shared/safe_mode.c
+msgid "Internal watchdog timer expired."
+msgstr ""
+
+#: py/argcheck.c
 msgid "Invalid %q"
 msgstr "%q invalide"
 
-#: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
-#: ports/atmel-samd/common-hal/audiobusio/PDMIn.c
-#: ports/atmel-samd/common-hal/imagecapture/ParallelImageCapture.c
-#: ports/mimxrt10xx/common-hal/busio/UART.c
+#: shared-bindings/microcontroller/Pin.c
 msgid "Invalid %q pin"
 msgstr "Broche invalide pour '%q'"
-
-#: ports/stm/common-hal/busio/I2C.c ports/stm/common-hal/busio/SPI.c
-#: ports/stm/common-hal/busio/UART.c ports/stm/common-hal/canio/CAN.c
-#: ports/stm/common-hal/sdioio/SDCard.c
-msgid "Invalid %q pin selection"
-msgstr "Sélection de broche %q invalide"
 
 #: ports/stm/common-hal/analogio/AnalogIn.c
 msgid "Invalid ADC Unit value"
 msgstr "Valeur d'unité ADC non valide"
 
-#: ports/espressif/common-hal/wifi/Radio.c
-msgid "Invalid AuthMode"
-msgstr "AuthMode invalide"
-
+#: ports/espressif/common-hal/_bleio/__init__.c
 #: ports/nrf/common-hal/_bleio/__init__.c
 msgid "Invalid BLE parameter"
 msgstr "Paramètre BLE invalide"
-
-#: shared-module/displayio/OnDiskBitmap.c
-msgid "Invalid BMP file"
-msgstr "Fichier BMP invalide"
 
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid BSSID"
 msgstr "BSSID invalide"
 
-#: ports/espressif/common-hal/analogio/AnalogOut.c
-#: ports/stm/common-hal/analogio/AnalogOut.c
-msgid "Invalid DAC pin supplied"
-msgstr "Broche DAC non valide fournie"
-
 #: shared-bindings/wifi/Radio.c
 msgid "Invalid MAC address"
 msgstr "Adresse MAC invalide"
 
-#: shared-bindings/synthio/__init__.c
-msgid "Invalid MIDI file"
-msgstr "Fichier MIDI invalide"
-
-#: ports/atmel-samd/common-hal/pwmio/PWMOut.c
-#: ports/cxd56/common-hal/pwmio/PWMOut.c
-#: ports/espressif/common-hal/pwmio/PWMOut.c
-#: ports/mimxrt10xx/common-hal/pwmio/PWMOut.c
-#: ports/nrf/common-hal/pwmio/PWMOut.c
-#: ports/raspberrypi/common-hal/pwmio/PWMOut.c shared-bindings/pwmio/PWMOut.c
-msgid "Invalid PWM frequency"
-msgstr "Fréquence de PWM invalide"
-
-#: ports/espressif/common-hal/analogio/AnalogIn.c
-msgid "Invalid Pin"
-msgstr "Broche invalide"
-
-#: ports/espressif/bindings/espidf/__init__.c
-#: ports/espressif/common-hal/busio/I2C.c
-#: ports/espressif/common-hal/i2cperipheral/I2CPeripheral.c
-#: ports/espressif/esp_error.c py/moduerrno.c
-#: shared-module/rgbmatrix/RGBMatrix.c
+#: ports/espressif/bindings/espidf/__init__.c ports/espressif/esp_error.c
+#: py/moduerrno.c
 msgid "Invalid argument"
 msgstr "Paramètre invalide"
 
@@ -1372,41 +1244,10 @@ msgstr "Paramètre invalide"
 msgid "Invalid bits per value"
 msgstr "Bits par valeur invalides"
 
-#: ports/nrf/common-hal/busio/UART.c ports/raspberrypi/common-hal/busio/UART.c
-#: ports/stm/common-hal/busio/UART.c
-msgid "Invalid buffer size"
-msgstr "Longueur de tampon invalide"
-
-#: shared-bindings/adafruit_pixelbuf/PixelBuf.c
-msgid "Invalid byteorder string"
-msgstr "Chaîne byteorder non valide"
-
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-#: ports/espressif/common-hal/frequencyio/FrequencyIn.c
-msgid "Invalid capture period. Valid range: 1 - 500"
-msgstr "Période de capture invalide. Portée valide : 1 à 500"
-
-#: shared-bindings/audiomixer/Mixer.c
-msgid "Invalid channel count"
-msgstr "Nombre de canaux invalide"
-
-#: ports/atmel-samd/common-hal/imagecapture/ParallelImageCapture.c
-#, c-format
-msgid "Invalid data_count %d"
-msgstr "data_count invalide %d"
-
 #: ports/atmel-samd/common-hal/imagecapture/ParallelImageCapture.c
 #, c-format
 msgid "Invalid data_pins[%d]"
 msgstr "data_pins[%d] invalide"
-
-#: shared-bindings/digitalio/DigitalInOut.c
-msgid "Invalid direction."
-msgstr "Direction invalide."
-
-#: shared-module/audiocore/WaveFile.c
-msgid "Invalid file"
-msgstr "Fichier invalide"
 
 #: shared-module/audiocore/WaveFile.c
 msgid "Invalid format chunk size"
@@ -1420,68 +1261,9 @@ msgstr "Accès à la mémoire invalide."
 msgid "Invalid multicast MAC address"
 msgstr "Adresse MAC multicast invalide"
 
-#: shared-bindings/bitbangio/SPI.c shared-bindings/busio/SPI.c
-msgid "Invalid number of bits"
-msgstr "Nombre de bits invalide"
-
-#: shared-bindings/bitbangio/SPI.c shared-bindings/busio/SPI.c
-#: shared-bindings/displayio/FourWire.c
-msgid "Invalid phase"
-msgstr "Phase invalide"
-
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
-#: ports/atmel-samd/common-hal/touchio/TouchIn.c
-#: ports/espressif/common-hal/alarm/touch/TouchAlarm.c
-#: ports/espressif/common-hal/touchio/TouchIn.c
-#: ports/nrf/common-hal/alarm/pin/PinAlarm.c shared-bindings/pwmio/PWMOut.c
-#: shared-module/rgbmatrix/RGBMatrix.c
-msgid "Invalid pin"
-msgstr "Broche invalide"
-
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
-msgid "Invalid pin for left channel"
-msgstr "Broche invalide pour le canal gauche"
-
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
-msgid "Invalid pin for right channel"
-msgstr "Broche invalide pour le canal droit"
-
-#: ports/atmel-samd/common-hal/busio/I2C.c
-#: ports/atmel-samd/common-hal/busio/SPI.c
-#: ports/atmel-samd/common-hal/busio/UART.c
-#: ports/atmel-samd/common-hal/i2cperipheral/I2CPeripheral.c
-#: ports/cxd56/common-hal/busio/I2C.c ports/cxd56/common-hal/busio/SPI.c
-#: ports/cxd56/common-hal/busio/UART.c ports/cxd56/common-hal/sdioio/SDCard.c
-#: ports/espressif/common-hal/busio/I2C.c
-#: ports/espressif/common-hal/busio/SPI.c
-#: ports/espressif/common-hal/busio/UART.c
-#: ports/espressif/common-hal/canio/CAN.c
-#: ports/espressif/common-hal/i2cperipheral/I2CPeripheral.c
-#: ports/mimxrt10xx/common-hal/busio/I2C.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/nrf/common-hal/busio/I2C.c
-#: ports/raspberrypi/common-hal/busio/I2C.c
-#: ports/raspberrypi/common-hal/busio/SPI.c
-#: ports/raspberrypi/common-hal/busio/UART.c shared-bindings/busio/SPI.c
 #: shared-bindings/busio/UART.c
 msgid "Invalid pins"
 msgstr "Broches invalides"
-
-#: shared-bindings/bitbangio/SPI.c shared-bindings/busio/SPI.c
-#: shared-bindings/displayio/FourWire.c
-msgid "Invalid polarity"
-msgstr "Polarité invalide"
-
-#: shared-bindings/_bleio/Characteristic.c
-msgid "Invalid properties"
-msgstr "Propriétés invalides"
-
-#: shared-bindings/microcontroller/__init__.c
-msgid "Invalid run mode."
-msgstr "Mode de lancement invalide."
-
-#: shared-module/_bleio/Attribute.c
-msgid "Invalid security_mode"
-msgstr "'security_mode' invalide"
 
 #: ports/espressif/bindings/espidf/__init__.c ports/espressif/esp_error.c
 msgid "Invalid size"
@@ -1495,28 +1277,11 @@ msgstr "Socket non valide pour TLS"
 msgid "Invalid state"
 msgstr "État invalide"
 
-#: shared-bindings/audiomixer/Mixer.c
-msgid "Invalid voice"
-msgstr "Voix invalide"
-
-#: shared-bindings/audiomixer/Mixer.c
-msgid "Invalid voice count"
-msgstr "Nombre de voix invalide"
-
-#: shared-module/audiocore/WaveFile.c
-msgid "Invalid wave file"
-msgstr "Fichier WAVE invalide"
-
-#: ports/mimxrt10xx/common-hal/busio/UART.c ports/nrf/common-hal/busio/UART.c
-#: ports/raspberrypi/common-hal/busio/UART.c ports/stm/common-hal/busio/UART.c
-msgid "Invalid word/bit length"
-msgstr "Longueur de mot / bit invalide"
-
 #: shared-bindings/aesio/aes.c
 msgid "Key must be 16, 24, or 32 bytes long"
 msgstr "La clé doit comporter 16, 24 ou 32 octets"
 
-#: shared-module/is31fl3741/IS31FL3741.c
+#: shared-module/is31fl3741/FrameBuffer.c
 msgid "LED mappings must match display size"
 msgstr "La disposition des LED doit correspondre à la taille de l'écran"
 
@@ -1525,41 +1290,46 @@ msgid "LHS of keyword arg must be an id"
 msgstr "La partie gauche de l'argument nommé doit être un identifiant"
 
 #: shared-module/displayio/Group.c
-msgid "Layer already in a group."
-msgstr "Couche déjà dans un groupe."
+msgid "Layer already in a group"
+msgstr "Ce calque est déjà dans un groupe"
 
 #: shared-module/displayio/Group.c
-msgid "Layer must be a Group or TileGrid subclass."
-msgstr "'Layer' doit être un 'Group' ou une sous-classe 'TileGrid'."
+msgid "Layer must be a Group or TileGrid subclass"
+msgstr ""
 
 #: ports/espressif/bindings/espidf/__init__.c ports/espressif/esp_error.c
 msgid "MAC address was invalid"
 msgstr "Adresse physique (MAC) invalide"
 
-#: shared-module/bitbangio/SPI.c
-msgid "MISO pin init failed."
-msgstr "Échec de l'initialization de la broche MISO."
-
-#: shared-module/bitbangio/SPI.c
-msgid "MOSI pin init failed."
-msgstr "Échec de l'initialization de la broche MOSI."
+#: shared-bindings/is31fl3741/IS31FL3741.c
+msgid "Mapping must be a tuple"
+msgstr ""
 
 #: shared-module/displayio/Shape.c
 #, c-format
 msgid "Maximum x value when mirrored is %d"
 msgstr "La valeur maximale de x est %d lors d'une opération miroir"
 
-#: shared-bindings/canio/Message.c
-msgid "Messages limited to 8 bytes"
-msgstr "Messages limités à 8 octets"
-
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Microphone startup delay must be in range 0.0 to 1.0"
 msgstr "Le délais au démarrage du micro doit être entre 0.0 et 1.0"
 
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/stm/common-hal/busio/SPI.c
+#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
+#: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
+msgid "Mismatched data size"
+msgstr "La taille des données ne correspond pas"
+
+#: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
+msgid "Mismatched swap flag"
+msgstr "Le drapeau d'échange ne correspond pas"
+
+#: ports/mimxrt10xx/common-hal/busio/SPI.c
 msgid "Missing MISO or MOSI Pin"
 msgstr "Broche MISO ou MOSI manquante"
+
+#: ports/stm/common-hal/busio/SPI.c
+msgid "Missing MISO or MOSI pin"
+msgstr "La broche MISO ou MOSI est manquante"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 #, c-format
@@ -1598,11 +1368,6 @@ msgstr "first_set_pin manquant. L'instruction %d règle la/les broche(s)"
 msgid "Missing jmp_pin. Instruction %d jumps on pin"
 msgstr "jmp_pin manquant. L'instruction %d va passer à la broche"
 
-#: shared-module/usb_hid/Device.c
-#, c-format
-msgid "More than %d report ids not supported"
-msgstr "Plus de %d identifiants de rapport ne sont pas supportés"
-
 #: shared-bindings/busio/UART.c shared-bindings/displayio/Group.c
 msgid "Must be a %q subclass."
 msgstr "Doit être une sous-classe de %q."
@@ -1628,6 +1393,15 @@ msgstr "Erreur NVS"
 msgid "Name too long"
 msgstr "Nom trop long"
 
+#: shared-bindings/displayio/TileGrid.c
+msgid "New bitmap must be same size as old bitmap"
+msgstr "La taille du nouveau bitmap doit être la même que l'ancien"
+
+#: ports/espressif/common-hal/_bleio/__init__.c
+msgid "Nimble out of memory"
+msgstr ""
+
+#: ports/espressif/common-hal/_bleio/Characteristic.c
 #: ports/nrf/common-hal/_bleio/Characteristic.c
 msgid "No CCCD for this Characteristic"
 msgstr "Pas de CCCD pour cette caractéristique"
@@ -1650,18 +1424,30 @@ msgstr "Aucun minuteur de rythme DMA trouvé"
 
 #: shared-module/adafruit_bus_device/i2c_device/I2CDevice.c
 #, c-format
-msgid "No I2C device at address: %x"
-msgstr "Pas de dispositif I2C à l'adresse : %x"
+msgid "No I2C device at address: 0x%x"
+msgstr "Aucun périphérique I2S à l'adresse : 0x%x"
+
+#: supervisor/shared/web_workflow/web_workflow.c
+msgid "No IP"
+msgstr "Aucune IP"
 
 #: ports/espressif/common-hal/busio/SPI.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/stm/common-hal/busio/SPI.c
+#: ports/mimxrt10xx/common-hal/busio/SPI.c
 msgid "No MISO Pin"
 msgstr "Pas de broche MISO"
 
+#: ports/stm/common-hal/busio/SPI.c shared-module/bitbangio/SPI.c
+msgid "No MISO pin"
+msgstr "Aucune broche MISO"
+
 #: ports/espressif/common-hal/busio/SPI.c
-#: ports/mimxrt10xx/common-hal/busio/SPI.c ports/stm/common-hal/busio/SPI.c
+#: ports/mimxrt10xx/common-hal/busio/SPI.c
 msgid "No MOSI Pin"
 msgstr "Pas de broche MOSI"
+
+#: ports/stm/common-hal/busio/SPI.c shared-module/bitbangio/SPI.c
+msgid "No MOSI pin"
+msgstr "Aucune broche MOSI"
 
 #: ports/atmel-samd/common-hal/busio/UART.c
 #: ports/espressif/common-hal/busio/UART.c
@@ -1700,16 +1486,6 @@ msgstr "Pas de GCLK libre"
 #: shared-bindings/os/__init__.c
 msgid "No hardware random available"
 msgstr "Aucunes source de valeurs aléatoire matérielle disponible"
-
-#: ports/atmel-samd/common-hal/ps2io/Ps2.c
-msgid "No hardware support on clk pin"
-msgstr "Pas de support matériel sur la broche clk"
-
-#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
-#: ports/atmel-samd/common-hal/frequencyio/FrequencyIn.c
-#: ports/atmel-samd/common-hal/pulseio/PulseIn.c
-msgid "No hardware support on pin"
-msgstr "Pas de support matériel pour cette broche"
 
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "No in in program"
@@ -1756,6 +1532,10 @@ msgid "No space left on device"
 msgstr "Aucun espace libre sur le dispositif"
 
 #: py/moduerrno.c
+msgid "No such device"
+msgstr "Aucun périphérique correspondant"
+
+#: py/moduerrno.c
 msgid "No such file/directory"
 msgstr "Fichier/répertoire introuvable"
 
@@ -1775,6 +1555,7 @@ msgstr "Logiciel systême Nordic hors de mémoire"
 msgid "Not a valid IP string"
 msgstr "Chaîne IP non valide"
 
+#: ports/espressif/common-hal/_bleio/__init__.c
 #: ports/nrf/common-hal/_bleio/__init__.c
 #: shared-bindings/_bleio/CharacteristicBuffer.c
 msgid "Not connected"
@@ -1856,16 +1637,23 @@ msgid "Only one address is allowed"
 msgstr "Seulement une adresse est autorisée"
 
 #: ports/atmel-samd/common-hal/alarm/time/TimeAlarm.c
-#: ports/espressif/common-hal/alarm/time/TimeAlarm.c
 #: ports/nrf/common-hal/alarm/time/TimeAlarm.c
-#: ports/raspberrypi/common-hal/alarm/time/TimeAlarm.c
 #: ports/stm/common-hal/alarm/time/TimeAlarm.c
+msgid "Only one alarm.time alarm can be set"
+msgstr "Seule une alarme alarm.time peut être définie"
+
+#: ports/espressif/common-hal/alarm/time/TimeAlarm.c
+#: ports/raspberrypi/common-hal/alarm/time/TimeAlarm.c
 msgid "Only one alarm.time alarm can be set."
 msgstr "Seulement une alarme alarm.time peut être réglée."
 
 #: shared-module/displayio/ColorConverter.c
 msgid "Only one color can be transparent at a time"
 msgstr "Une seule couleur peut être transparente à la fois"
+
+#: py/moduerrno.c
+msgid "Operation not permitted"
+msgstr "Cette opération n'est pas permise"
 
 #: ports/espressif/bindings/espidf/__init__.c ports/espressif/esp_error.c
 msgid "Operation or feature not supported"
@@ -1887,11 +1675,6 @@ msgstr "Plus de sockets"
 msgid "Out-buffer elements must be <= 4 bytes long"
 msgstr "Éléments du tampon de sortie doivent être <= à 4 octets"
 
-#: shared-bindings/bitops/__init__.c
-#, c-format
-msgid "Output buffer must be at least %d bytes"
-msgstr "Tampon de sortie doit être au moins %d octets"
-
 #: shared-bindings/audiobusio/PDMIn.c
 msgid "Oversample must be multiple of 8."
 msgstr "Le sur-échantillonage doit être un multiple de 8."
@@ -1902,17 +1685,14 @@ msgstr "PDMIn non disponible"
 
 #: shared-bindings/pwmio/PWMOut.c
 msgid ""
-"PWM duty_cycle must be between 0 and 65535 inclusive (16 bit resolution)"
-msgstr ""
-"La valeur de duty_cycle de PWM doit être entre 0 et 65535 inclusivement "
-"(résolution de 16 bits)"
-
-#: shared-bindings/pwmio/PWMOut.c
-msgid ""
 "PWM frequency not writable when variable_frequency is False on construction."
 msgstr ""
 "La fréquence de PWM n'est pas modifiable quand variable_frequency est False "
 "à la construction."
+
+#: ports/stm/common-hal/pwmio/PWMOut.c
+msgid "PWM restart"
+msgstr "Redémarrage PWM"
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "PWM slice already in use"
@@ -1930,28 +1710,13 @@ msgstr "Périphérique en utilisation"
 msgid "Permission denied"
 msgstr "Permission refusée"
 
-#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
 #: ports/stm/common-hal/alarm/pin/PinAlarm.c
 msgid "Pin cannot wake from Deep Sleep"
 msgstr "La broche ne peut être réveillée depuis un sommeil profond"
 
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "Pin count must be at least 1"
-msgstr "Nombre de broches doit être au moins 1"
-
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "Pin count too large"
 msgstr "Nombre de broches trop élevé"
-
-#: ports/atmel-samd/common-hal/analogio/AnalogIn.c
-#: ports/cxd56/common-hal/analogio/AnalogIn.c
-#: ports/espressif/common-hal/analogio/AnalogIn.c
-#: ports/mimxrt10xx/common-hal/analogio/AnalogIn.c
-#: ports/nrf/common-hal/analogio/AnalogIn.c
-#: ports/raspberrypi/common-hal/analogio/AnalogIn.c
-#: ports/stm/common-hal/analogio/AnalogIn.c
-msgid "Pin does not have ADC capabilities"
-msgstr "La broche 'pin' ne supporte pas les capacitées ADC"
 
 #: ports/stm/common-hal/alarm/pin/PinAlarm.c
 #: ports/stm/common-hal/pulseio/PulseIn.c
@@ -2026,16 +1791,8 @@ msgid "Program does OUT without loading OSR"
 msgstr "Le programme fait des sorties sans charger d'OSR"
 
 #: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "Program must contain at least one 16-bit instruction."
-msgstr "Le programme doit contenir au moins une instruction de 16 bits."
-
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
 msgid "Program size invalid"
 msgstr "Taille du programme invalide"
-
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "Program too large"
-msgstr "Programme trop grand"
 
 #: shared-bindings/digitalio/DigitalInOut.c
 msgid "Pull not used when direction is output."
@@ -2048,7 +1805,7 @@ msgstr "Mode RAISE n'est pas implémenté"
 
 #: ports/raspberrypi/common-hal/countio/Counter.c
 msgid "RISE_AND_FALL not available on this chip"
-msgstr ""
+msgstr "RISE_AND_FALL n'est pas disponible sur cette puce"
 
 #: ports/stm/common-hal/os/__init__.c
 msgid "RNG DeInit Error"
@@ -2058,29 +1815,19 @@ msgstr "Erreur de désinitialisation du RNG"
 msgid "RNG Init Error"
 msgstr "Erreur d'initialisation du RNG"
 
-#: ports/nrf/common-hal/busio/UART.c ports/raspberrypi/common-hal/busio/UART.c
-msgid "RS485 Not yet supported on this device"
-msgstr "RS485 n'est pas encore supporté sur cet appareil"
+#: ports/atmel-samd/common-hal/busio/UART.c ports/cxd56/common-hal/busio/UART.c
+#: ports/nrf/common-hal/busio/UART.c ports/stm/common-hal/busio/UART.c
+msgid "RS485"
+msgstr ""
 
 #: ports/espressif/common-hal/busio/UART.c
 #: ports/mimxrt10xx/common-hal/busio/UART.c
 msgid "RS485 inversion specified when not in RS485 mode"
 msgstr "Inversion RS485 spécifiée sans être en mode RS485"
 
-#: ports/cxd56/common-hal/rtc/RTC.c ports/espressif/common-hal/rtc/RTC.c
-#: ports/mimxrt10xx/common-hal/rtc/RTC.c ports/nrf/common-hal/rtc/RTC.c
-#: ports/raspberrypi/common-hal/rtc/RTC.c
-msgid "RTC calibration is not supported on this board"
-msgstr "La calibration du RTC non supportée sur cette carte"
-
 #: shared-bindings/alarm/time/TimeAlarm.c shared-bindings/time/__init__.c
 msgid "RTC is not supported on this board"
 msgstr "RTC non supporté sur cette carte"
-
-#: ports/atmel-samd/common-hal/busio/UART.c ports/cxd56/common-hal/busio/UART.c
-#: ports/stm/common-hal/busio/UART.c
-msgid "RTS/CTS/RS485 Not yet supported on this device"
-msgstr "RTS / CTS / RS485 Pas encore supporté sur cet appareil"
 
 #: ports/stm/common-hal/os/__init__.c
 msgid "Random number generation error"
@@ -2131,6 +1878,10 @@ msgstr "Mode sans-échec ! Le code sauvegardé n'est pas éxecuté.\n"
 msgid "SD card CSD format not supported"
 msgstr "Le format de carte SD CSD n'est pas supporté"
 
+#: ports/cxd56/common-hal/sdioio/SDCard.c
+msgid "SDCard init"
+msgstr "Initialisation SDCard"
+
 #: ports/stm/common-hal/sdioio/SDCard.c
 #, c-format
 msgid "SDIO GetCardInfo Error %d"
@@ -2141,35 +1892,27 @@ msgstr "Erreur de SDIO GetCardInfo %d"
 msgid "SDIO Init Error %d"
 msgstr "Erreur d'initialisation SDIO %d"
 
-#: ports/stm/common-hal/busio/SPI.c
-msgid "SPI Init Error"
-msgstr "Erreur d'initialisation SPI"
-
-#: ports/stm/common-hal/busio/SPI.c
-msgid "SPI Re-initialization error"
-msgstr "Erreur de réinitialisation SPI"
-
 #: ports/espressif/common-hal/busio/SPI.c
 msgid "SPI configuration failed"
 msgstr "La configuration SPI a échoué"
+
+#: ports/stm/common-hal/busio/SPI.c
+msgid "SPI init error"
+msgstr "Erreur d'initialisation SPI"
 
 #: ports/raspberrypi/common-hal/busio/SPI.c
 msgid "SPI peripheral in use"
 msgstr "Périphérique SPI utilisé"
 
-#: shared-bindings/audiomixer/Mixer.c
-msgid "Sample rate must be positive"
-msgstr "Le taux d'échantillonage doit être positif"
+#: ports/stm/common-hal/busio/SPI.c
+msgid "SPI re-init"
+msgstr ""
 
-#: ports/atmel-samd/common-hal/audioio/AudioOut.c
-#, c-format
-msgid "Sample rate too high. It must be less than %d"
-msgstr "Taux d'échantillonage trop élevé. Doit être inférieur à %d"
-
-#: shared-bindings/is31fl3741/IS31FL3741.c
+#: shared-bindings/is31fl3741/FrameBuffer.c
 msgid "Scale dimensions must divide by 3"
 msgstr "La dimension d'échelle doit être un multiple de 3"
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 msgid "Scan already in progess. Stop with stop_scan."
 msgstr "Scan déjà en cours. Arrêtez avec stop_scan."
@@ -2183,19 +1926,10 @@ msgstr "Sérialiseur en cours d'utilisation"
 msgid "Server side context cannot have hostname"
 msgstr "Un contexte niveau serveur ne peut avoir de hostname"
 
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "Set pin count must be between 1 and 5"
-msgstr "Nombre de broches configurées doit être entre 1 et 5"
-
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "Side set pin count must be between 1 and 5"
-msgstr "Nombre de broches Side configurées doit être entre 1 et 5"
-
 #: ports/cxd56/common-hal/camera/Camera.c
 msgid "Size not supported"
 msgstr "Taille n'est pas supportée"
 
-#: ports/atmel-samd/common-hal/alarm/SleepMemory.c
 #: ports/raspberrypi/common-hal/alarm/SleepMemory.c
 msgid "Sleep Memory not available"
 msgstr "La mémoire de sommeil n'est pas disponible"
@@ -2226,10 +1960,6 @@ msgstr "Spécifiez une unique broche parmi data0 ou data_pins"
 #: extmod/modure.c
 msgid "Splitting with sub-captures"
 msgstr "Fractionnement avec des sous-captures"
-
-#: shared-bindings/supervisor/__init__.c
-msgid "Stack size must be at least 256"
-msgstr "La pile doit être au moins de 256"
 
 #: ports/raspberrypi/common-hal/audiopwmio/PWMAudioOut.c
 msgid "Stereo left must be on PWM channel A"
@@ -2328,10 +2058,6 @@ msgid "Tile index out of bounds"
 msgstr "Index des tuiles hors limites"
 
 #: shared-bindings/displayio/TileGrid.c
-msgid "Tile value out of bounds"
-msgstr "Valeur de tuile hors limites"
-
-#: shared-bindings/displayio/TileGrid.c
 msgid "Tile width must exactly divide bitmap width"
 msgstr "La largeur de la tuile doit diviser exactement la largeur de l'image"
 
@@ -2339,6 +2065,7 @@ msgstr "La largeur de la tuile doit diviser exactement la largeur de l'image"
 msgid "Time is in the past."
 msgstr "L'heure est dans le passé."
 
+#: ports/espressif/common-hal/_bleio/Adapter.c
 #: ports/nrf/common-hal/_bleio/Adapter.c
 #, c-format
 msgid "Timeout is too long: Maximum timeout length is %d seconds"
@@ -2349,6 +2076,9 @@ msgid "To exit, please reset the board without "
 msgstr "Pour quitter, SVP redémarrez la carte sans "
 
 #: ports/atmel-samd/common-hal/audiobusio/I2SOut.c
+msgid "Too many channels in sample"
+msgstr "Trop de canaux dans l'échantillon"
+
 #: ports/raspberrypi/common-hal/audiobusio/I2SOut.c
 msgid "Too many channels in sample."
 msgstr "Trop de canaux dans l'échantillon."
@@ -2361,6 +2091,7 @@ msgstr "Trop de bus d'affichage"
 msgid "Too many displays"
 msgstr "Trop d'affichages"
 
+#: ports/espressif/common-hal/_bleio/PacketBuffer.c
 #: ports/nrf/common-hal/_bleio/PacketBuffer.c
 msgid "Total data to write is larger than %q"
 msgstr "Quantité de données à écrire est plus que %q"
@@ -2380,24 +2111,21 @@ msgid "Tuple or struct_time argument required"
 msgstr "Paramètre de type tuple ou struct_time requis"
 
 #: ports/stm/common-hal/busio/UART.c
-msgid "UART Buffer allocation error"
-msgstr "Erreur d'allocation de tampon UART"
+msgid "UART de-init"
+msgstr ""
+
+#: ports/atmel-samd/common-hal/busio/UART.c ports/cxd56/common-hal/busio/UART.c
+#: ports/espressif/common-hal/busio/UART.c ports/stm/common-hal/busio/UART.c
+msgid "UART init"
+msgstr "Initialisation UART"
 
 #: ports/stm/common-hal/busio/UART.c
-msgid "UART De-init error"
-msgstr "Erreur de désactivation UART"
+msgid "UART re-init"
+msgstr ""
 
 #: ports/stm/common-hal/busio/UART.c
-msgid "UART Init Error"
-msgstr "Erreur d'initialisation UART"
-
-#: ports/stm/common-hal/busio/UART.c
-msgid "UART Re-init error"
-msgstr "Erreur de réinitialisation UART"
-
-#: ports/stm/common-hal/busio/UART.c
-msgid "UART write error"
-msgstr "Erreur d'écriture UART"
+msgid "UART write"
+msgstr "Écriture UART"
 
 #: shared-module/usb_hid/Device.c
 msgid "USB busy"
@@ -2459,6 +2187,10 @@ msgstr "Impossible d'initialiser le parser"
 msgid "Unable to read color palette data"
 msgstr "Impossible de lire les données de la palette de couleurs"
 
+#: ports/espressif/common-hal/mdns/Server.c
+msgid "Unable to start mDNS query"
+msgstr "Impossible de lancer la requête mDNS"
+
 #: shared-bindings/nvm/ByteArray.c
 msgid "Unable to write to nvm."
 msgstr "Écriture impossible vers nvm."
@@ -2476,6 +2208,16 @@ msgstr "Type inattendu pour l'uuid nrfx"
 msgid "Unhandled ESP TLS error %d %d %x %d"
 msgstr "Erreur ESP TLS non gérée %d %d %x %d"
 
+#: ports/espressif/common-hal/_bleio/__init__.c
+#, c-format
+msgid "Unknown BLE error at %s:%d: %d"
+msgstr "Erreur BLE inconnue à %s:%d : %d"
+
+#: ports/espressif/common-hal/_bleio/__init__.c
+#, c-format
+msgid "Unknown BLE error: %d"
+msgstr "Erreur BLE inconnue : %d"
+
 #: shared-bindings/wifi/Radio.c
 #, c-format
 msgid "Unknown failure %d"
@@ -2486,6 +2228,7 @@ msgstr "Échec inconnu %d"
 msgid "Unknown gatt error: 0x%04x"
 msgstr "Erreur gatt inconnue : 0x%04x"
 
+#: ports/atmel-samd/common-hal/alarm/pin/PinAlarm.c
 #: supervisor/shared/safe_mode.c
 msgid "Unknown reason."
 msgstr "Raison inconnue."
@@ -2495,10 +2238,20 @@ msgstr "Raison inconnue."
 msgid "Unknown security error: 0x%04x"
 msgstr "Erreur de sécurité inconnue : 0x%04x"
 
+#: ports/espressif/common-hal/_bleio/__init__.c
+#, c-format
+msgid "Unknown system firmware error at %s:%d: %d"
+msgstr ""
+
 #: ports/nrf/common-hal/_bleio/__init__.c
 #, c-format
 msgid "Unknown system firmware error: %04x"
 msgstr "Faute inconnue du logiciel systême : %04x"
+
+#: ports/espressif/common-hal/_bleio/__init__.c
+#, c-format
+msgid "Unknown system firmware error: %d"
+msgstr "Erreur du firmware système inconnue : %d"
 
 #: shared-bindings/adafruit_pixelbuf/PixelBuf.c
 #, c-format
@@ -2514,12 +2267,6 @@ msgstr ""
 "Problème non spécifié. Il se peut que l'invite d'association sur l'autre "
 "appareil ait été refusée ou ignorée."
 
-#: ports/atmel-samd/common-hal/busio/I2C.c ports/cxd56/common-hal/busio/I2C.c
-#: ports/espressif/common-hal/busio/UART.c
-#: ports/raspberrypi/common-hal/busio/I2C.c ports/stm/common-hal/busio/I2C.c
-msgid "Unsupported baudrate"
-msgstr "Débit en bauds non supporté"
-
 #: shared-bindings/bitmaptools/__init__.c
 msgid "Unsupported colorspace"
 msgstr "Espace de couleur non supporté"
@@ -2532,19 +2279,19 @@ msgstr "Type de bus d'affichage non supporté"
 msgid "Unsupported format"
 msgstr "Format non supporté"
 
-#: py/moduerrno.c
-msgid "Unsupported operation"
-msgstr "Opération non supportée"
-
 #: ports/espressif/common-hal/dualbank/__init__.c
 msgid "Update Failed"
 msgstr "Mise-à-jour échouée"
 
+#: ports/espressif/common-hal/_bleio/Characteristic.c
+#: ports/espressif/common-hal/_bleio/Descriptor.c
 #: ports/nrf/common-hal/_bleio/Characteristic.c
 #: ports/nrf/common-hal/_bleio/Descriptor.c
 msgid "Value length != required fixed length"
 msgstr "Longueur de valeur != Longueur fixe requise"
 
+#: ports/espressif/common-hal/_bleio/Characteristic.c
+#: ports/espressif/common-hal/_bleio/Descriptor.c
 #: ports/nrf/common-hal/_bleio/Characteristic.c
 #: ports/nrf/common-hal/_bleio/Descriptor.c
 msgid "Value length > max_length"
@@ -2584,10 +2331,6 @@ msgstr ""
 msgid "WatchDogTimer.timeout must be greater than 0"
 msgstr "WatchDogTimer.timeout doit être supérieur à 0"
 
-#: supervisor/shared/safe_mode.c
-msgid "Watchdog timer expired."
-msgstr "Le minuteur Watchdog a expiré."
-
 #: py/builtinhelp.c
 #, c-format
 msgid ""
@@ -2603,14 +2346,15 @@ msgstr ""
 "\n"
 "Pour lister les modules internes, entrez `help(\"modules\")`.\n"
 
-#: shared-bindings/wifi/Radio.c
-msgid "WiFi password must be between 8 and 63 characters"
-msgstr "Le mot de passe WiFi doit faire entre 8 et 63 caractères"
+#: supervisor/shared/web_workflow/web_workflow.c
+msgid "Wi-Fi: "
+msgstr "Wi-Fi : "
 
 #: main.c
 msgid "Woken up by alarm.\n"
 msgstr "Réveil par alarme.\n"
 
+#: ports/espressif/common-hal/_bleio/PacketBuffer.c
 #: ports/nrf/common-hal/_bleio/PacketBuffer.c
 msgid "Writes not supported on Characteristic"
 msgstr "Écritures non supporté vers les Characteristic"
@@ -2760,10 +2504,6 @@ msgstr "Les tailles des images doivent correspondre"
 msgid "bits must be 32 or less"
 msgstr "Les bits doivent être 32 ou moins"
 
-#: shared-bindings/busio/UART.c
-msgid "bits must be in range 5 to 9"
-msgstr "les bits doivent être compris entre 5 et 9"
-
 #: shared-bindings/audiomixer/Mixer.c
 msgid "bits_per_sample must be 8 or 16"
 msgstr "'bits_per_sample' doivent être 8 ou 16"
@@ -2801,11 +2541,6 @@ msgstr "tampon trop petit pour le nombre d'octets demandé"
 msgid "byteorder is not a string"
 msgstr "byteorder n'est pas une chaîne"
 
-#: ports/atmel-samd/common-hal/busio/UART.c
-#: ports/espressif/common-hal/busio/UART.c
-msgid "bytes > 8 bits not supported"
-msgstr "octets > 8 bits non supporté"
-
 #: py/objarray.c
 msgid "bytes length not a multiple of item size"
 msgstr "bytes length n'est pas un multiple de la taille d'un élément"
@@ -2814,7 +2549,7 @@ msgstr "bytes length n'est pas un multiple de la taille d'un élément"
 msgid "bytes value out of range"
 msgstr "valeur des octets hors bornes"
 
-#: ports/atmel-samd/bindings/samd/Clock.c ports/atmel-samd/common-hal/rtc/RTC.c
+#: ports/atmel-samd/bindings/samd/Clock.c
 msgid "calibration is out of range"
 msgstr "étalonnage hors bornes"
 
@@ -2822,13 +2557,10 @@ msgstr "étalonnage hors bornes"
 msgid "calibration is read only"
 msgstr "étalonnage en lecture seule"
 
-#: ports/atmel-samd/common-hal/rtc/RTC.c
-msgid "calibration value out of range +/-127"
-msgstr "valeur de étalonnage hors bornes +/-127"
-
+#: shared-module/vectorio/Circle.c shared-module/vectorio/Polygon.c
 #: shared-module/vectorio/Rectangle.c
-msgid "can only be registered in one parent"
-msgstr ""
+msgid "can only have one parent"
+msgstr "ne peut avoir qu'un seul parent"
 
 #: py/emitinlinethumb.c
 msgid "can only have up to 4 parameters to Thumb assembly"
@@ -2871,7 +2603,7 @@ msgstr "impossible de convertir l'objet '%q' en '%q' implicitement"
 
 #: extmod/ulab/code/numpy/vector.c
 msgid "can't convert complex to float"
-msgstr ""
+msgstr "ne peut convertir un complexe en flottant"
 
 #: py/obj.c
 msgid "can't convert to %q"
@@ -2925,6 +2657,10 @@ msgstr "impossible de charger depuis '%q'"
 msgid "can't load with '%q' index"
 msgstr "impossible de charger avec l'indice '%q'"
 
+#: py/builtinimport.c
+msgid "can't perform relative import"
+msgstr ""
+
 #: py/objgenerator.c
 msgid "can't send non-None value to a just-started generator"
 msgstr ""
@@ -2975,11 +2711,11 @@ msgstr "output ne peut être projeté sans règle de projection"
 
 #: extmod/ulab/code/ndarray.c
 msgid "cannot convert complex to dtype"
-msgstr ""
+msgstr "ne peut convertir un complexe en dtype"
 
 #: extmod/ulab/code/ndarray.c
 msgid "cannot convert complex type"
-msgstr ""
+msgstr "ne peut convertir un type complexe"
 
 #: py/objtype.c
 msgid "cannot create '%q' instances"
@@ -2993,10 +2729,6 @@ msgstr "ne peut pas créer une instance"
 msgid "cannot import name %q"
 msgstr "ne peut pas importer le nom %q"
 
-#: py/builtinimport.c
-msgid "cannot perform relative import"
-msgstr "ne peut pas réaliser un import relatif"
-
 #: extmod/moductypes.c
 msgid "cannot unambiguously get sizeof scalar"
 msgstr "ne peut récupérer sans ambigüité le sizeof d'un scalaire"
@@ -3004,6 +2736,10 @@ msgstr "ne peut récupérer sans ambigüité le sizeof d'un scalaire"
 #: py/emitnative.c
 msgid "casting"
 msgstr "typage"
+
+#: ports/stm/common-hal/pwmio/PWMOut.c
+msgid "channel re-init"
+msgstr ""
 
 #: shared-bindings/_stage/Text.c
 msgid "chars buffer too small"
@@ -3016,10 +2752,6 @@ msgstr "paramètre de chr() hors les bornes de range(0x11000)"
 #: py/modbuiltins.c
 msgid "chr() arg not in range(256)"
 msgstr "paramètre de chr() hors les bornes de range(256)"
-
-#: shared-module/vectorio/Circle.c
-msgid "circle can only be registered in one parent"
-msgstr "le cercle ne peut être enregistré que dans un seul parent"
 
 #: shared-bindings/bitmaptools/__init__.c
 msgid "clip point must be (x,y) tuple"
@@ -3172,13 +2904,9 @@ msgstr "division par zéro"
 msgid "division by zero"
 msgstr "division par zéro"
 
-#: ports/espressif/common-hal/rotaryio/IncrementalEncoder.c
-msgid "divisor must be 4"
-msgstr "le diviseur doit être 4"
-
 #: extmod/ulab/code/numpy/vector.c
 msgid "dtype must be float, or complex"
-msgstr ""
+msgstr "le dtype doit être un flottant, ou un complexe"
 
 #: py/objdeque.c
 msgid "empty"
@@ -3323,6 +3051,10 @@ msgstr "la police doit être longue de 2048 octets"
 msgid "format requires a dict"
 msgstr "le format nécessite un dict"
 
+#: shared-bindings/microcontroller/Processor.c
+msgid "frequency is read-only for this board"
+msgstr "la fréquence est en lecture seule pour cette carte"
+
 #: py/objdeque.c
 msgid "full"
 msgstr "plein"
@@ -3450,6 +3182,10 @@ msgid "indices must be integers, slices, or Boolean lists"
 msgstr ""
 "les indices doivent être des entiers, des tranches ou des listes booléennes"
 
+#: ports/espressif/common-hal/busio/I2C.c
+msgid "init I2C"
+msgstr "initialisation I2C"
+
 #: extmod/ulab/code/scipy/optimize/optimize.c
 msgid "initial values must be iterable"
 msgstr "les valeurs initiales doivent être itérables"
@@ -3497,7 +3233,7 @@ msgstr "la matrice d'entrée est singulière"
 
 #: extmod/ulab/code/numpy/carray/carray.c
 msgid "input must be a 1D ndarray"
-msgstr ""
+msgstr "l'entrée doit être un ndarray 1D"
 
 #: extmod/ulab/code/scipy/linalg/linalg.c extmod/ulab/code/user/user.c
 msgid "input must be a dense ndarray"
@@ -3513,7 +3249,7 @@ msgstr "l'entrée doit être un ndarray"
 
 #: extmod/ulab/code/numpy/carray/carray.c
 msgid "input must be an ndarray, or a scalar"
-msgstr ""
+msgstr "l'entrée doit être un ndarray, ou un scalaire"
 
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "input must be one-dimensional"
@@ -3681,6 +3417,14 @@ msgstr "entiers longs non supportés dans cette build"
 msgid "loopback + silent mode not supported by peripheral"
 msgstr "loopback + silent mode non pris en charge par le périphérique"
 
+#: ports/espressif/common-hal/mdns/Server.c
+msgid "mDNS already initialized"
+msgstr ""
+
+#: ports/espressif/common-hal/mdns/Server.c
+msgid "mDNS only works with built-in WiFi"
+msgstr "mDNS ne fonctionne que avec le WiFi intégré"
+
 #: py/parse.c
 msgid "malformed f-string"
 msgstr "f-string mal formé"
@@ -3697,15 +3441,12 @@ msgstr "erreur de domaine math"
 msgid "matrix is not positive definite"
 msgstr "la matrice n'est pas définie positive"
 
+#: ports/espressif/common-hal/_bleio/Descriptor.c
 #: ports/nrf/common-hal/_bleio/Characteristic.c
 #: ports/nrf/common-hal/_bleio/Descriptor.c
 #, c-format
 msgid "max_length must be 0-%d when fixed_length is %s"
 msgstr "max_length doit être 0-%d lorsque fixed_length est %s"
-
-#: shared-bindings/_bleio/Characteristic.c shared-bindings/_bleio/Descriptor.c
-msgid "max_length must be >= 0"
-msgstr "max_length doit être >= 0"
 
 #: extmod/ulab/code/ndarray.c
 msgid "maximum number of dimensions is 4"
@@ -3850,6 +3591,7 @@ msgstr "pas de tel attribut"
 msgid "non-Device in %q"
 msgstr "aucun appareil dans %q"
 
+#: ports/espressif/common-hal/_bleio/Connection.c
 #: ports/nrf/common-hal/_bleio/Connection.c
 msgid "non-UUID found in service_uuids_whitelist"
 msgstr "non UUID trouvé dans service_uuids_whitelist"
@@ -3894,7 +3636,7 @@ msgstr "pas assez d'arguments pour la chaîne de format"
 
 #: extmod/ulab/code/numpy/carray/carray_tools.c
 msgid "not implemented for complex dtype"
-msgstr ""
+msgstr "n'est pas implémenté pour les dtype complexes"
 
 #: extmod/ulab/code/numpy/create.c
 msgid "number of points must be at least 2"
@@ -3953,6 +3695,10 @@ msgstr "un objet avec un protocole de tampon est nécessaire"
 #: extmod/modubinascii.c
 msgid "odd-length string"
 msgstr "chaîne de longueur impaire"
+
+#: supervisor/shared/web_workflow/web_workflow.c
+msgid "off"
+msgstr "inactif"
 
 #: extmod/ulab/code/numpy/create.c extmod/ulab/code/utils/utils.c
 msgid "offset is too large"
@@ -4077,9 +3823,9 @@ msgid "pixel_shader must be displayio.Palette or displayio.ColorConverter"
 msgstr ""
 "pixel_shader doit être un objet displayio.Palette ou displayio.ColorConverter"
 
-#: shared-module/vectorio/Polygon.c
-msgid "polygon can only be registered in one parent"
-msgstr "le polygone ne peut être enregistré que dans un parent"
+#: extmod/vfs_posix_file.c
+msgid "poll on file not available on win32"
+msgstr ""
 
 #: ports/espressif/common-hal/pulseio/PulseIn.c
 msgid "pop from an empty PulseIn"
@@ -4106,48 +3852,8 @@ msgstr "le 3e argument de pow() ne peut être 0"
 msgid "pow() with 3 arguments requires integers"
 msgstr "pow() avec 3 arguments nécessite des entiers"
 
-#: ports/espressif/boards/adafruit_feather_esp32s2/mpconfigboard.h
-#: ports/espressif/boards/adafruit_feather_esp32s2_tft/mpconfigboard.h
-#: ports/espressif/boards/adafruit_feather_esp32s2_tftback_nopsram/mpconfigboard.h
-#: ports/espressif/boards/adafruit_funhouse/mpconfigboard.h
-#: ports/espressif/boards/adafruit_magtag_2.9_grayscale/mpconfigboard.h
-#: ports/espressif/boards/adafruit_metro_esp32s2/mpconfigboard.h
-#: ports/espressif/boards/adafruit_qtpy_esp32s2/mpconfigboard.h
-#: ports/espressif/boards/ai_thinker_esp32-c3s/mpconfigboard.h
-#: ports/espressif/boards/ai_thinker_esp_12k_nodemcu/mpconfigboard.h
-#: ports/espressif/boards/artisense_rd00/mpconfigboard.h
-#: ports/espressif/boards/atmegazero_esp32s2/mpconfigboard.h
-#: ports/espressif/boards/crumpspace_crumps2/mpconfigboard.h
-#: ports/espressif/boards/electroniccats_bastwifi/mpconfigboard.h
-#: ports/espressif/boards/espressif_esp32s3_box/mpconfigboard.h
-#: ports/espressif/boards/espressif_esp32s3_devkitc_1/mpconfigboard.h
-#: ports/espressif/boards/espressif_esp32s3_devkitc_1_nopsram/mpconfigboard.h
-#: ports/espressif/boards/espressif_hmi_devkit_1/mpconfigboard.h
-#: ports/espressif/boards/espressif_kaluga_1.3/mpconfigboard.h
-#: ports/espressif/boards/espressif_kaluga_1/mpconfigboard.h
-#: ports/espressif/boards/espressif_saola_1_wroom/mpconfigboard.h
-#: ports/espressif/boards/espressif_saola_1_wrover/mpconfigboard.h
-#: ports/espressif/boards/franzininho_wifi_wroom/mpconfigboard.h
-#: ports/espressif/boards/franzininho_wifi_wrover/mpconfigboard.h
-#: ports/espressif/boards/gravitech_cucumber_m/mpconfigboard.h
-#: ports/espressif/boards/gravitech_cucumber_ms/mpconfigboard.h
-#: ports/espressif/boards/gravitech_cucumber_r/mpconfigboard.h
-#: ports/espressif/boards/gravitech_cucumber_rs/mpconfigboard.h
-#: ports/espressif/boards/lilygo_ttgo_t8_s2_st7789/mpconfigboard.h
-#: ports/espressif/boards/lolin_s2_mini/mpconfigboard.h
-#: ports/espressif/boards/lolin_s2_pico/mpconfigboard.h
-#: ports/espressif/boards/microdev_micro_c3/mpconfigboard.h
-#: ports/espressif/boards/microdev_micro_s2/mpconfigboard.h
-#: ports/espressif/boards/morpheans_morphesp-240/mpconfigboard.h
-#: ports/espressif/boards/muselab_nanoesp32_s2_wroom/mpconfigboard.h
-#: ports/espressif/boards/muselab_nanoesp32_s2_wrover/mpconfigboard.h
-#: ports/espressif/boards/odt_pixelwing_esp32_s2/mpconfigboard.h
-#: ports/espressif/boards/targett_module_clip_wroom/mpconfigboard.h
-#: ports/espressif/boards/targett_module_clip_wrover/mpconfigboard.h
-#: ports/espressif/boards/unexpectedmaker_feathers2/mpconfigboard.h
-#: ports/espressif/boards/unexpectedmaker_feathers2_neo/mpconfigboard.h
-#: ports/espressif/boards/unexpectedmaker_feathers2_prerelease/mpconfigboard.h
-#: ports/espressif/boards/unexpectedmaker_tinys2/mpconfigboard.h
+#: ports/espressif/boards/adafruit_qtpy_esp32c3/mpconfigboard.h
+#: supervisor/shared/safe_mode.c
 msgid "pressing boot button at start up.\n"
 msgstr "bouton boot appuyé lors du démarrage.\n"
 
@@ -4166,14 +3872,6 @@ msgstr "appuyer le bouton de gauche au démarage\n"
 #: ports/raspberrypi/common-hal/rp2pio/StateMachine.c
 msgid "pull masks conflict with direction masks"
 msgstr "masque pull est en conflit avec les masques de direction"
-
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "pull_threshold must be between 1 and 32"
-msgstr "pull_threshold doit être entre 1 et 32"
-
-#: ports/raspberrypi/bindings/rp2pio/StateMachine.c
-msgid "push_threshold must be between 1 and 32"
-msgstr "push_threshold doit être entre 1 et 32"
 
 #: extmod/modutimeq.c
 msgid "queue overflow"
@@ -4331,10 +4029,6 @@ msgstr "source_bitmap doit avoir une value_count de 65536"
 msgid "source_bitmap must have value_count of 8"
 msgstr "source_bitmap doit avoir une value_count de 8"
 
-#: shared-bindings/wifi/Radio.c
-msgid "ssid can't be more than 32 bytes"
-msgstr "un ssid ne peut pas faire plus de 32 octets"
-
 #: py/objstr.c
 msgid "start/end indices"
 msgstr "indices de début/fin"
@@ -4346,10 +4040,6 @@ msgstr "'start_x' doit être un entier 'int'"
 #: shared-bindings/random/__init__.c
 msgid "step must be non-zero"
 msgstr "le pas 'step' doit être non nul"
-
-#: shared-bindings/busio/UART.c
-msgid "stop must be 1 or 2"
-msgstr "stop doit être 1 ou 2"
 
 #: shared-bindings/random/__init__.c
 msgid "stop not reachable from start"
@@ -4400,10 +4090,6 @@ msgstr "erreur de syntaxe dans le descripteur d'uctypes"
 msgid "threshold must be in the range 0-65536"
 msgstr "le seuil doit être dans la portée 0-65536"
 
-#: shared-bindings/rgbmatrix/RGBMatrix.c
-msgid "tile must be greater than zero"
-msgstr "tile doit être plus que zéro"
-
 #: shared-bindings/time/__init__.c
 msgid "time.struct_time() takes a 9-sequence"
 msgstr "time.struct_time() prend une séquence de longueur 9"
@@ -4423,10 +4109,6 @@ msgstr "le délai doit être compris entre 0.0 et 100.0 secondes"
 msgid "timeout must be < 655.35 secs"
 msgstr "le délai (timeout) doit être < 655.35 secondes"
 
-#: shared-bindings/_bleio/CharacteristicBuffer.c
-msgid "timeout must be >= 0.0"
-msgstr "'timeout' doit être >= 0.0"
-
 #: shared-module/sdcardio/SDCard.c
 msgid "timeout waiting for v1 card"
 msgstr "Délai d’expiration dépassé en attendant une carte v1"
@@ -4434,6 +4116,10 @@ msgstr "Délai d’expiration dépassé en attendant une carte v1"
 #: shared-module/sdcardio/SDCard.c
 msgid "timeout waiting for v2 card"
 msgstr "Délai d’expiration dépassé en attendant une carte v2"
+
+#: ports/stm/common-hal/pwmio/PWMOut.c
+msgid "timer re-init"
+msgstr ""
 
 #: shared-bindings/time/__init__.c
 msgid "timestamp out of range for platform time_t"
@@ -4626,13 +4312,7 @@ msgstr "chien de garde (watchdog) non initialisé"
 msgid "watchdog timeout must be greater than 0"
 msgstr "watchdog timeout doit être supérieur à 0"
 
-#: shared-bindings/bitops/__init__.c
-#, c-format
-msgid "width must be from 2 to 8 (inclusive), not %d"
-msgstr "width doit être entre 2 et 8 (inclusivement), non %d"
-
-#: shared-bindings/is31fl3741/IS31FL3741.c
-#: shared-bindings/rgbmatrix/RGBMatrix.c
+#: shared-bindings/is31fl3741/FrameBuffer.c
 msgid "width must be greater than zero"
 msgstr "width doit être plus que zero"
 
@@ -4658,7 +4338,7 @@ msgstr "type d'entrée incorrect"
 
 #: extmod/ulab/code/numpy/transform.c
 msgid "wrong length of condition array"
-msgstr ""
+msgstr "mauvaise taille du tableau de condition"
 
 #: extmod/ulab/code/numpy/create.c py/objarray.c py/objstr.c
 msgid "wrong number of arguments"
@@ -4703,6 +4383,375 @@ msgstr "zi doit être de type float"
 #: extmod/ulab/code/scipy/signal/signal.c
 msgid "zi must be of shape (n_section, 2)"
 msgstr "zi doit être de forme (n_section, 2)"
+
+#~ msgid "Watchdog timer expired."
+#~ msgstr "Le minuteur Watchdog a expiré."
+
+#~ msgid "ssid can't be more than 32 bytes"
+#~ msgstr "un ssid ne peut pas faire plus de 32 octets"
+
+#~ msgid "%q must be a tuple of length 2"
+#~ msgstr "%q doit être un tuple de longueur 2"
+
+#~ msgid "%q must be between %d and %d"
+#~ msgstr "%q doit être entre %d et %d"
+
+#~ msgid "%q should be an int"
+#~ msgstr "%q doit être un chiffre entier (int)"
+
+#~ msgid "(x,y) integers required"
+#~ msgstr "Des entiers (x,y) requis"
+
+#~ msgid "Address type out of range"
+#~ msgstr "Type d'adresse hors portée"
+
+#~ msgid "AnalogIn not supported on given pin"
+#~ msgstr "'AnalogOut' n'est pas supporté sur la broche indiquée"
+
+#~ msgid "AnalogOut functionality not supported"
+#~ msgstr "Fonctionnalité AnalogOut non supportée"
+
+#~ msgid "AnalogOut is only 16 bits. Value must be less than 65536."
+#~ msgstr ""
+#~ "AnalogOut est seulement 16 bits. Les valeurs doivent être inférieures à "
+#~ "65536."
+
+#~ msgid "AnalogOut not supported on given pin"
+#~ msgstr "'AnalogOut' n'est pas supporté sur la broche indiquée"
+
+#, c-format
+#~ msgid "Bit depth must be from 1 to 6 inclusive, not %d"
+#~ msgstr "Bit depth doit être entre 1 et 6 inclusivement, et non %d"
+
+#, c-format
+#~ msgid "Buffer incorrect size. Should be %d bytes."
+#~ msgstr "Tampon de taille incorrect. Devrait être de %d octets."
+
+#~ msgid "Buffer must be at least length 1"
+#~ msgstr "Le tampon doit être de longueur au moins 1"
+
+#~ msgid "Bytes must be between 0 and 255."
+#~ msgstr "Les octets 'bytes' doivent être entre 0 et 255."
+
+#~ msgid "Cannot output both channels on the same pin"
+#~ msgstr "Les 2 canaux de sortie ne peuvent être sur la même broche"
+
+#~ msgid "Cannot read without MISO pin."
+#~ msgstr "Impossible de lire sans broche MISO."
+
+#~ msgid "Cannot reset into bootloader because no bootloader is present."
+#~ msgstr ""
+#~ "Ne peut être redémarré vers le bootloader car il n'y a pas de bootloader."
+
+#~ msgid "Cannot transfer without MOSI and MISO pins."
+#~ msgstr "Pas de transfert sans broches MOSI et MISO."
+
+#~ msgid "Cannot write without MOSI pin."
+#~ msgstr "Impossible d'écrire sans broche MOSI."
+
+#~ msgid "Clock pin init failed."
+#~ msgstr "Échec de l'initialization de la broche d'horloge."
+
+#~ msgid "Command must be an int between 0 and 255"
+#~ msgstr "La commande doit être un chiffre entier entre 0 et 255"
+
+#~ msgid "Could not initialize Camera"
+#~ msgstr "Impossible d'initialiser Camera"
+
+#~ msgid "Could not initialize GNSS"
+#~ msgstr "Impossible d'initialiser GNSS"
+
+#~ msgid "Could not initialize SDCard"
+#~ msgstr "Impossible d'initialiser la carte SD"
+
+#~ msgid "Could not initialize UART"
+#~ msgstr "Impossible d'initialiser UART"
+
+#~ msgid "Could not re-init channel"
+#~ msgstr "Impossible de réinitialiser le canal"
+
+#~ msgid "Could not re-init timer"
+#~ msgstr "Impossible de réinitialiser le minuteur"
+
+#~ msgid "Could not restart PWM"
+#~ msgstr "Impossible de redémarrer PWM"
+
+#~ msgid "Couldn't allocate first buffer"
+#~ msgstr "Impossible d'allouer le premier tampon"
+
+#~ msgid "Couldn't allocate input buffer"
+#~ msgstr "Impossible d'allouer le tampon d'entrée"
+
+#~ msgid "Couldn't allocate second buffer"
+#~ msgstr "Impossible d'allouer le deuxième tampon"
+
+#~ msgid "DigitalInOut not supported on given pin"
+#~ msgstr "DigitalInOut non pris en charge sur la broche donnée"
+
+#, c-format
+#~ msgid "Expected tuple of length %d, got %d"
+#~ msgstr "Tuple de longueur %d attendu, obtenu %d"
+
+#~ msgid "Failed to allocate RX buffer"
+#~ msgstr "Echec de l'allocation du tampon RX"
+
+#, c-format
+#~ msgid "Failed to allocate RX buffer of %d bytes"
+#~ msgstr "Echec de l'allocation de %d octets du tampon RX"
+
+#, c-format
+#~ msgid "Framebuffer requires %d bytes"
+#~ msgstr "FrameBuffer nécessite %d octets"
+
+#~ msgid "Hostname must be between 1 and 253 characters"
+#~ msgstr "Hostname doit être entre 1 et 253 caractères"
+
+#~ msgid "I2C Init Error"
+#~ msgstr "Erreur d'initialisation I2C"
+
+#~ msgid "Invalid %q pin selection"
+#~ msgstr "Sélection de broche %q invalide"
+
+#~ msgid "Invalid AuthMode"
+#~ msgstr "AuthMode invalide"
+
+#~ msgid "Invalid BMP file"
+#~ msgstr "Fichier BMP invalide"
+
+#~ msgid "Invalid DAC pin supplied"
+#~ msgstr "Broche DAC non valide fournie"
+
+#~ msgid "Invalid MIDI file"
+#~ msgstr "Fichier MIDI invalide"
+
+#~ msgid "Invalid PWM frequency"
+#~ msgstr "Fréquence de PWM invalide"
+
+#~ msgid "Invalid Pin"
+#~ msgstr "Broche invalide"
+
+#~ msgid "Invalid buffer size"
+#~ msgstr "Longueur de tampon invalide"
+
+#~ msgid "Invalid byteorder string"
+#~ msgstr "Chaîne byteorder non valide"
+
+#~ msgid "Invalid capture period. Valid range: 1 - 500"
+#~ msgstr "Période de capture invalide. Portée valide : 1 à 500"
+
+#~ msgid "Invalid channel count"
+#~ msgstr "Nombre de canaux invalide"
+
+#, c-format
+#~ msgid "Invalid data_count %d"
+#~ msgstr "data_count invalide %d"
+
+#~ msgid "Invalid direction."
+#~ msgstr "Direction invalide."
+
+#~ msgid "Invalid file"
+#~ msgstr "Fichier invalide"
+
+#~ msgid "Invalid number of bits"
+#~ msgstr "Nombre de bits invalide"
+
+#~ msgid "Invalid phase"
+#~ msgstr "Phase invalide"
+
+#~ msgid "Invalid pin"
+#~ msgstr "Broche invalide"
+
+#~ msgid "Invalid pin for left channel"
+#~ msgstr "Broche invalide pour le canal gauche"
+
+#~ msgid "Invalid pin for right channel"
+#~ msgstr "Broche invalide pour le canal droit"
+
+#~ msgid "Invalid polarity"
+#~ msgstr "Polarité invalide"
+
+#~ msgid "Invalid properties"
+#~ msgstr "Propriétés invalides"
+
+#~ msgid "Invalid run mode."
+#~ msgstr "Mode de lancement invalide."
+
+#~ msgid "Invalid security_mode"
+#~ msgstr "'security_mode' invalide"
+
+#~ msgid "Invalid voice"
+#~ msgstr "Voix invalide"
+
+#~ msgid "Invalid voice count"
+#~ msgstr "Nombre de voix invalide"
+
+#~ msgid "Invalid wave file"
+#~ msgstr "Fichier WAVE invalide"
+
+#~ msgid "Invalid word/bit length"
+#~ msgstr "Longueur de mot / bit invalide"
+
+#~ msgid "Layer already in a group."
+#~ msgstr "Couche déjà dans un groupe."
+
+#~ msgid "Layer must be a Group or TileGrid subclass."
+#~ msgstr "'Layer' doit être un 'Group' ou une sous-classe 'TileGrid'."
+
+#~ msgid "MISO pin init failed."
+#~ msgstr "Échec de l'initialization de la broche MISO."
+
+#~ msgid "MOSI pin init failed."
+#~ msgstr "Échec de l'initialization de la broche MOSI."
+
+#~ msgid "Messages limited to 8 bytes"
+#~ msgstr "Messages limités à 8 octets"
+
+#, c-format
+#~ msgid "More than %d report ids not supported"
+#~ msgstr "Plus de %d identifiants de rapport ne sont pas supportés"
+
+#~ msgid "No hardware support on clk pin"
+#~ msgstr "Pas de support matériel sur la broche clk"
+
+#~ msgid "No hardware support on pin"
+#~ msgstr "Pas de support matériel pour cette broche"
+
+#, c-format
+#~ msgid "Output buffer must be at least %d bytes"
+#~ msgstr "Tampon de sortie doit être au moins %d octets"
+
+#~ msgid ""
+#~ "PWM duty_cycle must be between 0 and 65535 inclusive (16 bit resolution)"
+#~ msgstr ""
+#~ "La valeur de duty_cycle de PWM doit être entre 0 et 65535 inclusivement "
+#~ "(résolution de 16 bits)"
+
+#~ msgid "Pin count must be at least 1"
+#~ msgstr "Nombre de broches doit être au moins 1"
+
+#~ msgid "Pin does not have ADC capabilities"
+#~ msgstr "La broche 'pin' ne supporte pas les capacitées ADC"
+
+#~ msgid "Program must contain at least one 16-bit instruction."
+#~ msgstr "Le programme doit contenir au moins une instruction de 16 bits."
+
+#~ msgid "Program too large"
+#~ msgstr "Programme trop grand"
+
+#~ msgid "RS485 Not yet supported on this device"
+#~ msgstr "RS485 n'est pas encore supporté sur cet appareil"
+
+#~ msgid "RTC calibration is not supported on this board"
+#~ msgstr "La calibration du RTC non supportée sur cette carte"
+
+#~ msgid "RTS/CTS/RS485 Not yet supported on this device"
+#~ msgstr "RTS / CTS / RS485 Pas encore supporté sur cet appareil"
+
+#~ msgid "SPI Init Error"
+#~ msgstr "Erreur d'initialisation SPI"
+
+#~ msgid "SPI Re-initialization error"
+#~ msgstr "Erreur de réinitialisation SPI"
+
+#~ msgid "Sample rate must be positive"
+#~ msgstr "Le taux d'échantillonage doit être positif"
+
+#, c-format
+#~ msgid "Sample rate too high. It must be less than %d"
+#~ msgstr "Taux d'échantillonage trop élevé. Doit être inférieur à %d"
+
+#~ msgid "Set pin count must be between 1 and 5"
+#~ msgstr "Nombre de broches configurées doit être entre 1 et 5"
+
+#~ msgid "Side set pin count must be between 1 and 5"
+#~ msgstr "Nombre de broches Side configurées doit être entre 1 et 5"
+
+#~ msgid "Stack size must be at least 256"
+#~ msgstr "La pile doit être au moins de 256"
+
+#~ msgid "Tile value out of bounds"
+#~ msgstr "Valeur de tuile hors limites"
+
+#~ msgid "UART Buffer allocation error"
+#~ msgstr "Erreur d'allocation de tampon UART"
+
+#~ msgid "UART De-init error"
+#~ msgstr "Erreur de désactivation UART"
+
+#~ msgid "UART Init Error"
+#~ msgstr "Erreur d'initialisation UART"
+
+#~ msgid "UART Re-init error"
+#~ msgstr "Erreur de réinitialisation UART"
+
+#~ msgid "UART write error"
+#~ msgstr "Erreur d'écriture UART"
+
+#~ msgid "Unsupported baudrate"
+#~ msgstr "Débit en bauds non supporté"
+
+#~ msgid "WiFi password must be between 8 and 63 characters"
+#~ msgstr "Le mot de passe WiFi doit faire entre 8 et 63 caractères"
+
+#~ msgid "bits must be in range 5 to 9"
+#~ msgstr "les bits doivent être compris entre 5 et 9"
+
+#~ msgid "bytes > 8 bits not supported"
+#~ msgstr "octets > 8 bits non supporté"
+
+#~ msgid "calibration value out of range +/-127"
+#~ msgstr "valeur de étalonnage hors bornes +/-127"
+
+#~ msgid "circle can only be registered in one parent"
+#~ msgstr "le cercle ne peut être enregistré que dans un seul parent"
+
+#~ msgid "max_length must be >= 0"
+#~ msgstr "max_length doit être >= 0"
+
+#~ msgid "polygon can only be registered in one parent"
+#~ msgstr "le polygone ne peut être enregistré que dans un parent"
+
+#~ msgid "pull_threshold must be between 1 and 32"
+#~ msgstr "pull_threshold doit être entre 1 et 32"
+
+#~ msgid "push_threshold must be between 1 and 32"
+#~ msgstr "push_threshold doit être entre 1 et 32"
+
+#~ msgid "stop must be 1 or 2"
+#~ msgstr "stop doit être 1 ou 2"
+
+#~ msgid "tile must be greater than zero"
+#~ msgstr "tile doit être plus que zéro"
+
+#~ msgid "timeout must be >= 0.0"
+#~ msgstr "'timeout' doit être >= 0.0"
+
+#, c-format
+#~ msgid "width must be from 2 to 8 (inclusive), not %d"
+#~ msgstr "width doit être entre 2 et 8 (inclusivement), non %d"
+
+#~ msgid "Unsupported operation"
+#~ msgstr "Opération non supportée"
+
+#~ msgid "divisor must be 4"
+#~ msgstr "le diviseur doit être 4"
+
+#~ msgid ""
+#~ "\n"
+#~ "Code stopped by auto-reload.\n"
+#~ msgstr ""
+#~ "\n"
+#~ "Exécution du code arrêté par l'auto-rechargement.\n"
+
+#~ msgid "Brightness must be between 0 and 255"
+#~ msgstr "La luminosité doit être entre 0 et 255"
+
+#~ msgid "cannot perform relative import"
+#~ msgstr "ne peut pas réaliser un import relatif"
+
+#, c-format
+#~ msgid "No I2C device at address: %x"
+#~ msgstr "Pas de dispositif I2C à l'adresse : %x"
 
 #~ msgid "Unsupported pull value."
 #~ msgstr "Valeur de tirage 'pull' non supportée."

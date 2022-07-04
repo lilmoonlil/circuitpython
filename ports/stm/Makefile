@@ -60,7 +60,7 @@ CROSS_COMPILE = arm-none-eabi-
 MCU_SERIES_LOWER = $(shell echo $(MCU_SERIES) | tr '[:upper:]' '[:lower:]')
 MCU_VARIANT_LOWER = $(shell echo $(MCU_VARIANT) | tr '[:upper:]' '[:lower:]')
 
-HAL_DIR=st_driver/STM32$(MCU_SERIES)xx_HAL_Driver
+HAL_DIR=st_driver/stm32$(MCU_SERIES_LOWER)xx_hal_driver
 
 INC += -I.
 INC += -I../..
@@ -68,8 +68,8 @@ INC += -I$(BUILD)
 INC += -I$(BUILD)/genhdr
 INC += -I./$(HAL_DIR)/Inc
 INC += -I./$(HAL_DIR)/Inc/Legacy
-INC += -I./st_driver/CMSIS/Device/ST/STM32$(MCU_SERIES)xx/Include
-INC += -I./st_driver/CMSIS/Include
+INC += -I./st_driver/cmsis_device_$(MCU_SERIES_LOWER)/Include
+INC += -I./st_driver/CMSIS_5/CMSIS/Core/Include
 INC += -I./boards
 INC += -I./boards/$(BOARD)
 INC += -I./hal_conf
@@ -88,8 +88,6 @@ else
 	CFLAGS += -DNDEBUG
 	OPTIMIZATION_FLAGS ?= -O2 -fno-inline-functions
 	CFLAGS += -ggdb3
-	# TODO: Test with -flto
-	# CFLAGS += -flto
 endif
 
 # to override compiler optimization level, set in boards/$(BOARD)/mpconfigboard.mk
@@ -242,7 +240,7 @@ endif
 
 SRC_S = \
 	supervisor/cpu.s \
-	st_driver/CMSIS/Device/ST/STM32$(MCU_SERIES)xx/Source/Templates/gcc/startup_$(MCU_VARIANT_LOWER).s
+	st_driver/cmsis_device_$(MCU_SERIES_LOWER)/Source/Templates/gcc/startup_$(MCU_VARIANT_LOWER).s
 
 SRC_COMMON_HAL_EXPANDED = $(addprefix shared-bindings/, $(SRC_COMMON_HAL)) \
 						  $(addprefix shared-bindings/, $(SRC_BINDINGS_ENUMS)) \
@@ -302,11 +300,11 @@ $(BUILD)/firmware.hex: $(BUILD)/firmware.elf
 
 $(BUILD)/firmware.uf2: $(BUILD)/firmware.hex
 	$(ECHO) "Create $@"
-	$(PYTHON) $(TOP)/tools/uf2/utils/uf2conv.py -f 0x57755a57 -b $(BOOTLOADER_OFFSET) -c -o "$(BUILD)/firmware.uf2" $^
+	$(PYTHON) $(TOP)/tools/uf2/utils/uf2conv.py -f $(UF2_FAMILY_ID) -b $(BOOTLOADER_OFFSET) -c -o "$(BUILD)/firmware.uf2" $^
 
 flash: $(BUILD)/firmware.bin
 	$(ECHO) "Writing $< to the board"
-	dfu-util -a 0 --dfuse-address 0x08000000 -D $(BUILD)/firmware.bin
+	dfu-util -a 0 --dfuse-address $(BOOTLOADER_OFFSET) -D $(BUILD)/firmware.bin
 
 include $(TOP)/py/mkrules.mk
 

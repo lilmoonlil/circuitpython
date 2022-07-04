@@ -35,7 +35,7 @@
 #include "py/mperrno.h"
 #include "py/runtime.h"
 #include "py/stream.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 #define ALL_UARTS 0xFFFF
 
@@ -58,7 +58,7 @@ STATIC USART_TypeDef *assign_uart_or_throw(busio_uart_obj_t *self, bool pin_eval
         if (uart_taken) {
             mp_raise_ValueError(translate("Hardware in use, try alternative pins"));
         } else {
-            mp_raise_ValueError_varg(translate("Invalid %q pin selection"), MP_QSTR_UART);
+            raise_ValueError_invalid_pin();
         }
     }
 }
@@ -93,7 +93,7 @@ void common_hal_busio_uart_construct(busio_uart_obj_t *self,
     uint8_t periph_index = 0; // origin 0 corrected
 
     if ((rts != NULL) || (cts != NULL) || (rs485_dir != NULL) || (rs485_invert == true)) {
-        mp_raise_ValueError(translate("RTS/CTS/RS485 Not yet supported on this device"));
+        mp_raise_NotImplementedError(translate("RS485"));
     }
 
     // Can have both pins, or either
@@ -164,14 +164,11 @@ void common_hal_busio_uart_construct(busio_uart_obj_t *self,
     }
 
     // Other errors
-    if (receiver_buffer_size == 0) {
-        mp_raise_ValueError(translate("Invalid buffer size"));
-    }
-    if (bits != 8 && bits != 9) {
-        mp_raise_ValueError(translate("Invalid word/bit length"));
-    }
+    mp_arg_validate_length_min(receiver_buffer_size, 1, MP_QSTR_receiver_buffer_size);
+    mp_arg_validate_int_range(bits, 8, 9, MP_QSTR_bits);
+
     if (USARTx == NULL) {  // this can only be hit if the periph file is wrong
-        mp_raise_ValueError(translate("Internal define error"));
+        mp_raise_RuntimeError(translate("Internal define error"));
     }
 
     // GPIO Init
@@ -211,7 +208,7 @@ void common_hal_busio_uart_construct(busio_uart_obj_t *self,
     self->handle.Init.HwFlowCtl = UART_HWCONTROL_NONE;
     self->handle.Init.OverSampling = UART_OVERSAMPLING_16;
     if (HAL_UART_Init(&self->handle) != HAL_OK) {
-        mp_raise_ValueError(translate("UART Init Error"));
+        mp_raise_RuntimeError(translate("UART init"));
 
     }
 
@@ -221,7 +218,7 @@ void common_hal_busio_uart_construct(busio_uart_obj_t *self,
             self->ringbuf = (ringbuf_t) { receiver_buffer, receiver_buffer_size };
         } else {
             if (!ringbuf_alloc(&self->ringbuf, receiver_buffer_size, true)) {
-                mp_raise_ValueError(translate("UART Buffer allocation error"));
+                m_malloc_fail(receiver_buffer_size);
             }
         }
         common_hal_mcu_pin_claim(rx);
@@ -235,7 +232,7 @@ void common_hal_busio_uart_construct(busio_uart_obj_t *self,
 
     // start the interrupt series
     if ((HAL_UART_GetState(&self->handle) & HAL_UART_STATE_BUSY_RX) == HAL_UART_STATE_BUSY_RX) {
-        mp_raise_ValueError(translate("Could not start interrupt, RX busy"));
+        mp_raise_RuntimeError(translate("Could not start interrupt, RX busy"));
     }
 
     // start the receive interrupt chain
@@ -259,7 +256,7 @@ void common_hal_busio_uart_never_reset(busio_uart_obj_t *self) {
 }
 
 bool common_hal_busio_uart_deinited(busio_uart_obj_t *self) {
-    return self->tx->pin == NULL && self->rx->pin == NULL;
+    return self->tx == NULL && self->rx == NULL;
 }
 
 void common_hal_busio_uart_deinit(busio_uart_obj_t *self) {
@@ -325,19 +322,22 @@ size_t common_hal_busio_uart_write(busio_uart_obj_t *self, const uint8_t *data, 
     if (self->tx == NULL) {
         mp_raise_ValueError(translate("No TX pin"));
     }
-    bool write_err = false; // write error shouldn't disable interrupts
 
+    // Disable UART IRQ to avoid resource hazards in Rx IRQ handler
     HAL_NVIC_DisableIRQ(self->irq);
-    HAL_StatusTypeDef ret = HAL_UART_Transmit(&self->handle, (uint8_t *)data, len, HAL_MAX_DELAY);
-    if (ret != HAL_OK) {
-        write_err = true;
-    }
-    HAL_UART_Receive_IT(&self->handle, &self->rx_char, 1);
+    HAL_StatusTypeDef ret = HAL_UART_Transmit_IT(&self->handle, (uint8_t *)data, len);
     HAL_NVIC_EnableIRQ(self->irq);
 
-    if (write_err) {
-        mp_raise_ValueError(translate("UART write error"));
+    if (HAL_OK == ret) {
+        HAL_UART_StateTypeDef Status = HAL_UART_GetState(&self->handle);
+        while ((Status & HAL_UART_STATE_BUSY_TX) == HAL_UART_STATE_BUSY_TX) {
+            RUN_BACKGROUND_TASKS;
+            Status = HAL_UART_GetState(&self->handle);
+        }
+    } else {
+        mp_raise_RuntimeError(translate("UART write"));
     }
+
     return len;
 }
 
@@ -358,6 +358,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *handle) {
                     mp_sched_keyboard_interrupt();
                 }
             }
+
+            #if (1)
+            // TODO: Implement error handling here
+            #else
+            while (HAL_BUSY == errflag) {
+                errflag = HAL_UART_Receive_IT(handle, &context->rx_char, 1);
+            }
+            #endif
 
             return;
         }
@@ -397,11 +405,11 @@ void common_hal_busio_uart_set_baudrate(busio_uart_obj_t *self, uint32_t baudrat
 
     // Otherwise de-init and set new rate
     if (HAL_UART_DeInit(&self->handle) != HAL_OK) {
-        mp_raise_ValueError(translate("UART De-init error"));
+        mp_raise_RuntimeError(translate("UART de-init"));
     }
     self->handle.Init.BaudRate = baudrate;
     if (HAL_UART_Init(&self->handle) != HAL_OK) {
-        mp_raise_ValueError(translate("UART Re-init error"));
+        mp_raise_RuntimeError(translate("UART re-init"));
     }
 
     self->baudrate = baudrate;
@@ -436,6 +444,10 @@ STATIC void call_hal_irq(int uart_num) {
     if (context != NULL) {
         HAL_NVIC_ClearPendingIRQ(context->irq);
         HAL_UART_IRQHandler(&context->handle);
+
+        if (HAL_UART_ERROR_NONE != context->handle.ErrorCode) {
+            // TODO: Implement error handling here
+        }
     }
 }
 

@@ -71,8 +71,8 @@ static void display_init(void) {
         spi,
         &pin_GPIO36,    // CLK
         &pin_GPIO35,    // MOSI
-        NULL            // MISO not connected
-        );
+        NULL,           // MISO not connected
+        false);         // Not half-duplex
 
     common_hal_busio_spi_never_reset(spi);
 
@@ -124,17 +124,14 @@ static void display_init(void) {
         true,           // auto_refresh
         60,             // native_frames_per_second
         true,           // backlight_on_high
-        false           // SH1107_addressing
+        false,          // SH1107_addressing
+        50000           // backlight pwm frequency
         );
 
     common_hal_never_reset_pin(&pin_GPIO33); // backlight pin
 }
 
 void board_init(void) {
-    // USB
-    common_hal_never_reset_pin(&pin_GPIO19);
-    common_hal_never_reset_pin(&pin_GPIO20);
-
     // Debug UART
     #ifdef DEBUG
     common_hal_never_reset_pin(&pin_GPIO43);

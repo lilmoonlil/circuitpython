@@ -98,7 +98,7 @@ uint8_t display_init_sequence[] = {
 
 void board_init(void) {
     busio_spi_obj_t *spi = &displays[0].fourwire_bus.inline_bus;
-    common_hal_busio_spi_construct(spi, &pin_PA13, &pin_PA15, NULL);
+    common_hal_busio_spi_construct(spi, &pin_PA13, &pin_PA15, NULL, false);
     common_hal_busio_spi_never_reset(spi);
 
     displayio_fourwire_obj_t *bus = &displays[0].fourwire_bus;
@@ -144,7 +144,8 @@ void board_init(void) {
         false, // auto_refresh
         20, // native_frames_per_second
         true, // backlight_on_high
-        false); // SH1107_addressing
+        false, // SH1107_addressing
+        50000); // backlight pwm frequency
 }
 
 bool board_requests_safe_mode(void) {

@@ -34,7 +34,7 @@
 #include "py/objproperty.h"
 #include "py/runtime.h"
 #include "shared-bindings/util.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 //| class Bitmap:
 //|     """Stores values of a certain size in a 2D array
@@ -97,12 +97,8 @@ STATIC mp_obj_t displayio_bitmap_obj_get_width(mp_obj_t self_in) {
 
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_bitmap_get_width_obj, displayio_bitmap_obj_get_width);
 
-const mp_obj_property_t displayio_bitmap_width_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_bitmap_get_width_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_bitmap_width_obj,
+    (mp_obj_t)&displayio_bitmap_get_width_obj);
 
 //|     height: int
 //|     """Height of the bitmap. (read only)"""
@@ -115,12 +111,8 @@ STATIC mp_obj_t displayio_bitmap_obj_get_height(mp_obj_t self_in) {
 
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_bitmap_get_height_obj, displayio_bitmap_obj_get_height);
 
-const mp_obj_property_t displayio_bitmap_height_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_bitmap_get_height_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_bitmap_height_obj,
+    (mp_obj_t)&displayio_bitmap_get_height_obj);
 
 //|     def __getitem__(self, index: Union[Tuple[int, int], int]) -> int:
 //|         """Returns the value at the given index. The index can either be an x,y tuple or an int equal
@@ -222,7 +214,8 @@ STATIC mp_obj_t displayio_bitmap_obj_blit(size_t n_args, const mp_obj_t *pos_arg
     int16_t x = args[ARG_x].u_int;
     int16_t y = args[ARG_y].u_int;
 
-    displayio_bitmap_t *source = MP_OBJ_TO_PTR(args[ARG_source].u_obj);
+    displayio_bitmap_t *source = mp_arg_validate_type(args[ARG_source].u_obj, &displayio_bitmap_type, MP_QSTR_source_bitmap);
+
 
     // ensure that the target bitmap (self) has at least as many `bits_per_value` as the source
     if (self->bits_per_value < source->bits_per_value) {

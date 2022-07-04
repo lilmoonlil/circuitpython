@@ -37,7 +37,7 @@
 #include "shared-bindings/microcontroller/Pin.h"
 #include "shared-bindings/util.h"
 #include "shared-module/displayio/__init__.h"
-#include "supervisor/shared/translate.h"
+#include "supervisor/shared/translate/translate.h"
 
 //| _DisplayBus = Union['FourWire', 'paralleldisplay.ParallelBus', 'I2CDisplay']
 //| """:py:class:`FourWire`, :py:class:`paralleldisplay.ParallelBus` or :py:class:`I2CDisplay`"""
@@ -111,6 +111,7 @@
 //|         :param bool backlight_on_high: If True, pulling the backlight pin high turns the backlight on.
 //|         :param bool SH1107_addressing: Special quirk for SH1107, use upper/lower column set and page set
 //|         :param int set_vertical_scroll: This parameter is accepted but ignored for backwards compatibility. It will be removed in a future release.
+//|         :param int backlight_pwm_frequency: The frequency to use to drive the PWM for backlight brightness control. Default is 50000.
 //|         """
 //|         ...
 //|
@@ -123,7 +124,7 @@ STATIC mp_obj_t displayio_display_make_new(const mp_obj_type_t *type, size_t n_a
            ARG_set_vertical_scroll, ARG_backlight_pin, ARG_brightness_command,
            ARG_brightness, ARG_auto_brightness, ARG_single_byte_bounds, ARG_data_as_commands,
            ARG_auto_refresh, ARG_native_frames_per_second, ARG_backlight_on_high,
-           ARG_SH1107_addressing };
+           ARG_SH1107_addressing, ARG_backlight_pwm_frequency };
     static const mp_arg_t allowed_args[] = {
         { MP_QSTR_display_bus, MP_ARG_REQUIRED | MP_ARG_OBJ },
         { MP_QSTR_init_sequence, MP_ARG_REQUIRED | MP_ARG_OBJ },
@@ -151,7 +152,8 @@ STATIC mp_obj_t displayio_display_make_new(const mp_obj_type_t *type, size_t n_a
         { MP_QSTR_auto_refresh, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = true} },
         { MP_QSTR_native_frames_per_second, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 60} },
         { MP_QSTR_backlight_on_high, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = true} },
-        { MP_QSTR_SH1107_addressing, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} }
+        { MP_QSTR_SH1107_addressing, MP_ARG_BOOL | MP_ARG_KW_ONLY, {.u_bool = false} },
+        { MP_QSTR_backlight_pwm_frequency, MP_ARG_INT | MP_ARG_KW_ONLY, {.u_int = 50000} }
     };
     mp_arg_val_t args[MP_ARRAY_SIZE(allowed_args)];
     mp_arg_parse_all_kw_array(n_args, n_kw, all_args, MP_ARRAY_SIZE(allowed_args), allowed_args, args);
@@ -170,14 +172,20 @@ STATIC mp_obj_t displayio_display_make_new(const mp_obj_type_t *type, size_t n_a
         mp_raise_ValueError(translate("Display rotation must be in 90 degree increments"));
     }
 
+    const bool sh1107_addressing = args[ARG_SH1107_addressing].u_bool;
+    const mp_int_t color_depth = args[ARG_color_depth].u_int;
+    if (sh1107_addressing && color_depth != 1) {
+        mp_raise_ValueError_varg(translate("%q must be 1 when %q is True"), MP_QSTR_color_depth, MP_QSTR_SH1107_addressing);
+    }
+
     primary_display_t *disp = allocate_display_or_raise();
     displayio_display_obj_t *self = &disp->display;
-    ;
+
     self->base.type = &displayio_display_type;
     common_hal_displayio_display_construct(
         self,
         display_bus, args[ARG_width].u_int, args[ARG_height].u_int, args[ARG_colstart].u_int, args[ARG_rowstart].u_int, rotation,
-        args[ARG_color_depth].u_int, args[ARG_grayscale].u_bool,
+        color_depth, args[ARG_grayscale].u_bool,
         args[ARG_pixels_in_byte_share_row].u_bool,
         args[ARG_bytes_per_cell].u_bool,
         args[ARG_reverse_pixels_in_byte].u_bool,
@@ -194,7 +202,8 @@ STATIC mp_obj_t displayio_display_make_new(const mp_obj_type_t *type, size_t n_a
         args[ARG_auto_refresh].u_bool,
         args[ARG_native_frames_per_second].u_int,
         args[ARG_backlight_on_high].u_bool,
-        args[ARG_SH1107_addressing].u_bool
+        sh1107_addressing,
+        args[ARG_backlight_pwm_frequency].u_int
         );
 
     return self;
@@ -297,12 +306,9 @@ STATIC mp_obj_t displayio_display_obj_set_auto_refresh(mp_obj_t self_in, mp_obj_
 }
 MP_DEFINE_CONST_FUN_OBJ_2(displayio_display_set_auto_refresh_obj, displayio_display_obj_set_auto_refresh);
 
-const mp_obj_property_t displayio_display_auto_refresh_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_auto_refresh_obj,
-              (mp_obj_t)&displayio_display_set_auto_refresh_obj,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETSET(displayio_display_auto_refresh_obj,
+    (mp_obj_t)&displayio_display_get_auto_refresh_obj,
+    (mp_obj_t)&displayio_display_set_auto_refresh_obj);
 
 //|     brightness: float
 //|     """The brightness of the display as a float. 0.0 is off and 1.0 is full brightness. When
@@ -334,12 +340,9 @@ STATIC mp_obj_t displayio_display_obj_set_brightness(mp_obj_t self_in, mp_obj_t 
 }
 MP_DEFINE_CONST_FUN_OBJ_2(displayio_display_set_brightness_obj, displayio_display_obj_set_brightness);
 
-const mp_obj_property_t displayio_display_brightness_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_brightness_obj,
-              (mp_obj_t)&displayio_display_set_brightness_obj,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETSET(displayio_display_brightness_obj,
+    (mp_obj_t)&displayio_display_get_brightness_obj,
+    (mp_obj_t)&displayio_display_set_brightness_obj);
 
 //|     auto_brightness: bool
 //|     """True when the display brightness is adjusted automatically, based on an ambient
@@ -362,12 +365,9 @@ STATIC mp_obj_t displayio_display_obj_set_auto_brightness(mp_obj_t self_in, mp_o
 }
 MP_DEFINE_CONST_FUN_OBJ_2(displayio_display_set_auto_brightness_obj, displayio_display_obj_set_auto_brightness);
 
-const mp_obj_property_t displayio_display_auto_brightness_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_auto_brightness_obj,
-              (mp_obj_t)&displayio_display_set_auto_brightness_obj,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETSET(displayio_display_auto_brightness_obj,
+    (mp_obj_t)&displayio_display_get_auto_brightness_obj,
+    (mp_obj_t)&displayio_display_set_auto_brightness_obj);
 
 
 
@@ -381,12 +381,8 @@ STATIC mp_obj_t displayio_display_obj_get_width(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_display_get_width_obj, displayio_display_obj_get_width);
 
-const mp_obj_property_t displayio_display_width_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_width_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_display_width_obj,
+    (mp_obj_t)&displayio_display_get_width_obj);
 
 //|     height: int
 //|     """Gets the height of the board"""
@@ -397,12 +393,8 @@ STATIC mp_obj_t displayio_display_obj_get_height(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_display_get_height_obj, displayio_display_obj_get_height);
 
-const mp_obj_property_t displayio_display_height_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_height_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_display_height_obj,
+    (mp_obj_t)&displayio_display_get_height_obj);
 
 //|     rotation: int
 //|     """The rotation of the display as an int in degrees."""
@@ -420,12 +412,9 @@ STATIC mp_obj_t displayio_display_obj_set_rotation(mp_obj_t self_in, mp_obj_t va
 MP_DEFINE_CONST_FUN_OBJ_2(displayio_display_set_rotation_obj, displayio_display_obj_set_rotation);
 
 
-const mp_obj_property_t displayio_display_rotation_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_rotation_obj,
-              (mp_obj_t)&displayio_display_set_rotation_obj,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETSET(displayio_display_rotation_obj,
+    (mp_obj_t)&displayio_display_get_rotation_obj,
+    (mp_obj_t)&displayio_display_set_rotation_obj);
 
 //|     bus: _DisplayBus
 //|     """The bus being used by the display"""
@@ -437,12 +426,21 @@ STATIC mp_obj_t displayio_display_obj_get_bus(mp_obj_t self_in) {
 }
 MP_DEFINE_CONST_FUN_OBJ_1(displayio_display_get_bus_obj, displayio_display_obj_get_bus);
 
-const mp_obj_property_t displayio_display_bus_obj = {
-    .base.type = &mp_type_property,
-    .proxy = {(mp_obj_t)&displayio_display_get_bus_obj,
-              MP_ROM_NONE,
-              MP_ROM_NONE},
-};
+MP_PROPERTY_GETTER(displayio_display_bus_obj,
+    (mp_obj_t)&displayio_display_get_bus_obj);
+
+//|     root_group: Group
+//|     """The root group on the display."""
+//|
+//|
+STATIC mp_obj_t displayio_display_obj_get_root_group(mp_obj_t self_in) {
+    displayio_display_obj_t *self = native_display(self_in);
+    return common_hal_displayio_display_get_root_group(self);
+}
+MP_DEFINE_CONST_FUN_OBJ_1(displayio_display_get_root_group_obj, displayio_display_obj_get_root_group);
+
+MP_PROPERTY_GETTER(displayio_display_root_group_obj,
+    (mp_obj_t)&displayio_display_get_root_group_obj);
 
 
 //|     def fill_row(self, y: int, buffer: WriteableBuffer) -> WriteableBuffer:
@@ -517,6 +515,7 @@ STATIC const mp_rom_map_elem_t displayio_display_locals_dict_table[] = {
     { MP_ROM_QSTR(MP_QSTR_height), MP_ROM_PTR(&displayio_display_height_obj) },
     { MP_ROM_QSTR(MP_QSTR_rotation), MP_ROM_PTR(&displayio_display_rotation_obj) },
     { MP_ROM_QSTR(MP_QSTR_bus), MP_ROM_PTR(&displayio_display_bus_obj) },
+    { MP_ROM_QSTR(MP_QSTR_root_group), MP_ROM_PTR(&displayio_display_root_group_obj) },
 };
 STATIC MP_DEFINE_CONST_DICT(displayio_display_locals_dict, displayio_display_locals_dict_table);
 

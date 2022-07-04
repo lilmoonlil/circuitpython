@@ -32,15 +32,16 @@
 #include "py/runtime.h"
 
 #include "shared-bindings/busio/I2C.h"
+#include "shared-bindings/microcontroller/Pin.h"
 
 void common_hal_busio_i2c_construct(busio_i2c_obj_t *self, const mcu_pin_obj_t *scl,
     const mcu_pin_obj_t *sda, uint32_t frequency, uint32_t timeout) {
     if (frequency != I2C_SPEED_STANDARD && frequency != I2C_SPEED_FAST) {
-        mp_raise_ValueError(translate("Unsupported baudrate"));
+        mp_arg_error_invalid(MP_QSTR_frequency);
     }
 
     if (scl->number != PIN_I2C0_BCK || sda->number != PIN_I2C0_BDT) {
-        mp_raise_ValueError(translate("Invalid pins"));
+        raise_ValueError_invalid_pins();
     }
 
     claim_pin(scl);
@@ -97,7 +98,7 @@ bool common_hal_busio_i2c_probe(busio_i2c_obj_t *self, uint8_t addr) {
     return I2C_TRANSFER(self->i2c_dev, &msg, 1) < 0 ? false : true;
 }
 
-uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t address, const uint8_t *data, size_t len, bool stop) {
+STATIC uint8_t _common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t address, const uint8_t *data, size_t len, bool stop) {
     struct i2c_msg_s msg;
 
     msg.frequency = self->frequency;
@@ -106,6 +107,11 @@ uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t address, cons
     msg.buffer = (uint8_t *)data;
     msg.length = len;
     return -I2C_TRANSFER(self->i2c_dev, &msg, 1);
+}
+
+uint8_t common_hal_busio_i2c_write(busio_i2c_obj_t *self, uint16_t addr,
+    const uint8_t *data, size_t len) {
+    return _common_hal_busio_i2c_write(self, addr, data, len, true);
 }
 
 uint8_t common_hal_busio_i2c_read(busio_i2c_obj_t *self, uint16_t address, uint8_t *data, size_t len) {
@@ -117,6 +123,16 @@ uint8_t common_hal_busio_i2c_read(busio_i2c_obj_t *self, uint16_t address, uint8
     msg.buffer = data;
     msg.length = len;
     return -I2C_TRANSFER(self->i2c_dev, &msg, 1);
+}
+
+uint8_t common_hal_busio_i2c_write_read(busio_i2c_obj_t *self, uint16_t addr,
+    uint8_t *out_data, size_t out_len, uint8_t *in_data, size_t in_len) {
+    uint8_t result = _common_hal_busio_i2c_write(self, addr, out_data, out_len, false);
+    if (result != 0) {
+        return result;
+    }
+
+    return common_hal_busio_i2c_read(self, addr, in_data, in_len);
 }
 
 void common_hal_busio_i2c_never_reset(busio_i2c_obj_t *self) {
