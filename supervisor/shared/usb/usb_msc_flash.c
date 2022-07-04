@@ -249,16 +249,8 @@ bool tud_msc_test_unit_ready_cb(uint8_t lun) {
     fs_user_mount_t *current_mount = get_vfs(lun);
     if (current_mount == NULL || ejected[lun]) {
         // Set 0x3a for media not present.
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x00);  // ok linux, ok cpy, no sd windows
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x03);  // no sd linux, ok cpy no sd windows
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x12);  // junk file linux, confuses/crashes windows
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);     // ok linux, no cpy no sd windows
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x03);     // works on both after a while
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x01);  // works on both after a while
-        // tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x04, 0x0B);  // no sd linux, windows gets stuck
-        ////////mp_printf(&mp_plat_print, "EJECTED, NOT READY\n");
-
-        // if no sense is set, tinyusb will default to MEDIUM NOT PRESENT: SCSI_SENSE_NOT_READY, 0x3A, 0x00
+        // If no sense is set, tinyusb will default to MEDIUM NOT PRESENT: SCSI_SENSE_NOT_READY, 0x3A, 0x00
+        tud_msc_set_sense(lun, SCSI_SENSE_NOT_READY, 0x3A, 0x00);
         return false;
     }
 
