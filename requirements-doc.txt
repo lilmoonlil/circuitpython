@@ -18,3 +18,4 @@ myst-parser
 
 # For stubs and annotations
 adafruit-circuitpython-typing
+requests>=2.32.0 # not directly required, pinned by Snyk to avoid a vulnerability
